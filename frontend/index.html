@@ -7,6 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>VIT Bhopal — Hostel Management System</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <link href="style.css" rel="stylesheet"/>
 ...
 <style>
@@ -398,6 +399,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 @media(max-width:600px){.sidebar{width:54px}.sb-lbl,.sb-sec,.sb-lt,.sb-ls,.sb-un,.sb-ue{display:none}.main{margin-left:54px}.page{padding:14px 16px}}
 </style>
 </head>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <body>
 
 <!-- AUTH PAGE -->
@@ -1275,7 +1277,7 @@ function doSignup(){
   if(!e.includes('vitbhopal'))return showToast('⚠️','Use your @vitbhopal.ac.in email.');
   if(p.length<6)return showToast('⚠️','Password must be at least 6 characters.');
   if(!g)return showToast('⚠️','Please select your gender.');
-  fetch('hhttps://hostel-roommate-system.onrender.com/api/auth/signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:n,email:e,password:p,regno:rn,gender:g,year:document.getElementById('s-year').value,branch:document.getElementById('s-branch').value,state:document.getElementById('s-state').value||'',city:document.getElementById('s-city').value.trim()||''})})
+  fetch('https://hostel-roommate-system.onrender.com/api/auth/signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:n,email:e,password:p,regno:rn,gender:g,year:document.getElementById('s-year').value,branch:document.getElementById('s-branch').value,state:document.getElementById('s-state').value||'',city:document.getElementById('s-city').value.trim()||''})})
   .then(function(r){return r.json();})
   .then(function(data){if(data.token){localStorage.setItem('token',data.token);USER={name:data.user.name,email:data.user.email,regno:data.user.regno,gender:data.user.gender,year:data.user.year||'',branch:data.user.branch||'',initials:data.user.name.split(' ').map(function(w){return w[0];}).join('').toUpperCase().slice(0,2),phone:'',sleep:'',study:'',college:'',noise:'',religious:'',habits:[],state:data.user.state||'',city:data.user.city||'',photoUrl:''};enterDashboard();}else{showToast('❌',data.message||'Signup failed');}})
   .catch(function(){showToast('❌','Server se connect nahi ho paya!');});
@@ -1283,14 +1285,41 @@ function doSignup(){
 function doLogin(){
   var e=document.getElementById('l-email').value.trim(),p=document.getElementById('l-pass').value;
   if(!e||!p)return showToast('⚠️','Please fill both fields.');
-  fetch('hhttps://hostel-roommate-system.onrender.com/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:e,password:p})})
+  fetch('https://hostel-roommate-system.onrender.com/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:e,password:p})})
   .then(function(r){return r.json();})
   .then(function(data){if(data.token){localStorage.setItem('token',data.token);USER={name:data.user.name,email:data.user.email,regno:data.user.regno,gender:data.user.gender,year:data.user.year||'',branch:data.user.branch||'',initials:data.user.name.split(' ').map(function(w){return w[0];}).join('').toUpperCase().slice(0,2),phone:data.user.phone||'',sleep:'',study:'',college:'',noise:'',religious:'',habits:data.user.habits||[],state:data.user.state||'',city:data.user.city||'',photoUrl:''};enterDashboard();}else{showToast('❌',data.message||'Login failed');}})
   .catch(function(){showToast('❌','Server se connect nahi ho paya!');});
 }
 function doGoogleAuth(){
-  USER={name:'Demo Student',email:'demo@vitbhopal.ac.in',regno:'24BCE0000',gender:'M',year:'2nd Year',branch:'B.Tech CSE',initials:'DS',phone:'',sleep:'',study:'',college:'',noise:'',religious:'',habits:[],state:'',city:'',photoUrl:''};
+  google.accounts.id.initialize({
+    client_id: '545039436119-3e05fi795fk2t8opmpf6o4rdmrjjl2ft.apps.googleusercontent.com',
+    callback: handleGoogleLogin
+  });
+  google.accounts.id.prompt();
+}
+function handleGoogleLogin(response){
+  var decoded = JSON.parse(atob(response.credential.split('.')[1]));
+  var name = decoded.name;
+  var email = decoded.email;
+  var pic = decoded.picture;
+  if(!email.includes('vitbhopal')){
+    showToast('❌','Please use your VIT Bhopal Google account!');
+    return;
+  }
+  USER={
+    name:name,
+    email:email,
+    regno:'',
+    gender:'',
+    year:'',
+    branch:'',
+    initials:name.split(' ').map(function(w){return w[0];}).join('').toUpperCase().slice(0,2),
+    phone:'',sleep:'',study:'',college:'',noise:'',religious:'',
+    habits:[],state:'',city:'',
+    photoUrl:pic
+  };
   enterDashboard();
+  showToast('✅','Google se login ho gaya!');
 }
 function enterDashboard(){
   document.getElementById('auth-page').style.display='none';
