@@ -1,0 +1,2077 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <!--<script type="module" src="firebase-config.js"></script>-->
+<!--<script type="module" src="app.js"></script>-->
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>VIT Bhopal — Hostel Management System</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="style.css" rel="stylesheet"/>
+...
+<style>
+  
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#1E3A8A;--navy2:#2563EB;--navy3:#3B82F6;
+  --sidebar:#12131A;--sidebar-text:#8A94B0;
+  --bg:#F4F6FB;--white:#FFFFFF;--border:#E2E8F4;
+  --text:#0F172A;--text2:#475569;--muted:#94A3B8;
+  --green:#16A34A;--green-bg:#DCFCE7;--green-text:#15803D;
+  --orange:#EA580C;--orange-bg:#FEF3C7;--orange-text:#B45309;
+  --blue-bg:#EFF6FF;--blue-text:#1D4ED8;
+  --purple:#7C3AED;--purple-bg:#F5F3FF;
+  --red:#DC2626;--red-bg:#FEE2E2;
+  --gold:#D97706;--gold-bg:#FFFBEB;
+  --card:#FFFFFF;--progress-bg:#E2E8F4;
+  --teal:#0D9488;--teal-bg:#F0FDFA;
+}
+[data-theme="dark"]{
+  --bg:#0D1117;--white:#161B22;--border:#21262D;
+  --text:#E6EDF3;--text2:#8B949E;--muted:#6E7681;
+  --card:#161B22;--progress-bg:#21262D;
+  --sidebar:#0D1117;--blue-bg:rgba(37,99,235,0.12);--green-bg:rgba(22,163,74,0.12);
+  --orange-bg:rgba(234,88,12,0.12);--gold-bg:rgba(217,119,6,0.12);--purple-bg:rgba(124,58,237,0.12);
+  --teal-bg:rgba(13,148,136,0.12);
+}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;line-height:1.5;display:flex;min-height:100vh;overflow-x:hidden}
+.sidebar{width:218px;min-height:100vh;background:var(--sidebar);display:flex;flex-direction:column;position:fixed;top:0;left:0;z-index:100}
+.sb-logo{padding:16px 14px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:10px}
+.sb-lm{width:32px;height:32px;border-radius:8px;background:var(--navy2);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.sb-lt{font-size:13px;font-weight:800;color:#fff}
+.sb-ls{font-size:9px;color:rgba(255,255,255,0.3);letter-spacing:0.05em;text-transform:uppercase;margin-top:1px}
+.sb-nav{flex:1;padding:8px 6px;overflow-y:auto}
+.sb-sec{font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.2);padding:10px 8px 5px}
+.sb-a{display:flex;align-items:center;gap:9px;padding:8px 9px;border-radius:7px;cursor:pointer;transition:all 0.15s;margin-bottom:1px;color:var(--sidebar-text);text-decoration:none}
+.sb-a:hover{background:rgba(255,255,255,0.06);color:#fff}
+.sb-a.on{background:rgba(255,255,255,0.09);color:#fff}
+.sb-a.on .sb-ic{color:var(--navy3)}
+.sb-ic{font-size:14px;width:17px;text-align:center;flex-shrink:0}
+.sb-lbl{font-size:12px;font-weight:600;flex:1}
+.sb-bdg{font-size:9px;font-weight:700;padding:2px 6px;border-radius:100px;background:var(--navy2);color:#fff}
+.sb-bdg.or{background:var(--orange)}
+.sb-bot{padding:10px 6px;border-top:1px solid rgba(255,255,255,0.06)}
+.sb-usr{display:flex;align-items:center;gap:9px;padding:8px 9px;border-radius:7px;cursor:pointer}
+.sb-usr:hover{background:rgba(255,255,255,0.06)}
+.sb-av{width:30px;height:30px;border-radius:7px;background:var(--navy2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0}
+.sb-un{font-size:12px;font-weight:700;color:#fff}
+.sb-ue{font-size:10px;color:rgba(255,255,255,0.3);margin-top:1px}
+.main{margin-left:218px;flex:1;min-height:100vh;display:flex;flex-direction:column}
+.topbar{height:50px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:50}
+.bc{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.bc b{color:var(--text2);font-weight:600}
+.tb-r{display:flex;align-items:center;gap:8px}
+.ico-btn{width:30px;height:30px;border-radius:7px;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;transition:all 0.2s;color:var(--text2);position:relative}
+.ico-btn:hover{border-color:var(--navy2);color:var(--navy2)}
+.ndot{position:absolute;top:4px;right:4px;width:6px;height:6px;border-radius:50%;background:var(--red);border:1.5px solid var(--white)}
+.tb-usr{display:flex;align-items:center;gap:7px;padding:4px 10px;border-radius:7px;background:var(--bg);border:1px solid var(--border);cursor:pointer}
+.tb-un{font-size:12px;font-weight:700}
+.page{display:none;padding:22px 24px;flex:1}
+.page.active{display:block}
+.ph{margin-bottom:18px}
+.ph h1{font-size:19px;font-weight:800;color:var(--text);margin-bottom:3px}
+.ph p{font-size:12.5px;color:var(--muted)}
+.sc-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:14px 16px}
+.sc-lbl{font-size:10px;font-weight:600;color:var(--muted);letter-spacing:0.04em;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
+.sc-val{font-size:20px;font-weight:800;color:var(--text);margin-bottom:2px}
+.sc-sub{font-size:11px;color:var(--muted)}
+.jb{border-radius:12px;padding:14px 20px;margin-bottom:18px;background:linear-gradient(135deg,#1E3A8A,#7C3AED);position:relative;overflow:hidden}
+.jb::before{content:'';position:absolute;top:-50px;right:-50px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.04)}
+.jb-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.jb-t{font-size:11px;font-weight:700;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:0.08em}
+.jb-pct{font-size:12px;font-weight:800;color:#fff}
+.jb-sub{font-size:12.5px;color:rgba(255,255,255,0.7);margin-bottom:10px}
+.jb-bar{height:6px;background:rgba(255,255,255,0.15);border-radius:100px;overflow:hidden}
+.jb-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,#60A5FA,#A78BFA)}
+.mg{display:grid;grid-template-columns:1fr 300px;gap:16px}
+.steps-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.steps-head{padding:13px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.steps-head h2{font-size:13.5px;font-weight:800;color:var(--text)}
+.tl{display:flex;align-items:flex-start;padding:18px 16px 16px;border-bottom:1px solid var(--border);gap:0;overflow-x:auto;overflow-y:visible;scrollbar-width:none}
+.tl::-webkit-scrollbar{display:none}
+.tl-node{display:flex;flex-direction:column;align-items:center;flex:1;min-width:56px;position:relative}
+.tl-step-num{font-size:7.5px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;text-align:center;line-height:1;white-space:nowrap}
+.tl-step-num.done{color:var(--green-text)}
+.tl-step-num.active{color:var(--blue-text)}
+.tl-c{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;border:2px solid var(--border);background:var(--card);color:var(--muted);flex-shrink:0;transition:all 0.2s;position:relative;z-index:2}
+.tl-c.done{background:var(--green);color:#fff;border-color:var(--green);font-size:14px}
+.tl-c.active{background:var(--navy2);color:#fff;border-color:var(--navy2);box-shadow:0 0 0 4px rgba(37,99,235,0.18)}
+.tl-c.pending{background:var(--card);color:var(--text2);border-color:#CBD5E1;border-width:2px}
+.tl-c.locked{background:var(--bg);color:var(--muted);border-color:var(--border);opacity:0.55}
+.tl-lbl{font-size:9.5px;font-weight:600;color:var(--muted);text-align:center;margin-top:6px;white-space:nowrap;line-height:1.2}
+.tl-lbl.done{color:var(--green);font-weight:700}
+.tl-lbl.active{color:var(--navy2);font-weight:800}
+.tl-lbl.pending{color:var(--text2);font-weight:600}
+.tl-connector{flex:1;min-width:8px;height:2px;position:relative;top:26px;z-index:1}
+.tl-connector-track{position:absolute;inset:0;border-radius:2px;background:var(--border)}
+.tl-connector-track.done{background:var(--green)}
+.tl-connector-track.active-grad{background:linear-gradient(90deg,var(--navy2) 0%,var(--border) 100%)}
+.si{padding:12px 18px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:12px;transition:background 0.18s;cursor:pointer}
+.si:last-child{border-bottom:none}
+.si:hover:not(.si-lck){background:var(--bg)}
+.si-iw{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.si-iw.done{background:var(--green-bg)}
+.si-iw.active{background:var(--blue-bg)}
+.si-iw.pending{background:var(--bg);border:1px solid var(--border)}
+.si-iw.locked{background:var(--bg);border:1px dashed var(--border);opacity:0.45}
+.si-body{flex:1}
+.si-top{display:flex;align-items:center;gap:7px;margin-bottom:2px}
+.si-title{font-size:13px;font-weight:700;color:var(--text)}
+.si-b{font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:100px}
+.si-b.done{background:var(--green-bg);color:var(--green-text)}
+.si-b.active{background:var(--blue-bg);color:var(--blue-text)}
+.si-b.pending{background:var(--progress-bg);color:var(--muted)}
+.si-b.locked{background:var(--progress-bg);color:var(--muted)}
+.si-desc{font-size:11.5px;color:var(--text2);margin-bottom:3px;line-height:1.5}
+.si-meta{font-size:10.5px;color:var(--muted)}
+.si-act{flex-shrink:0;margin-top:2px}
+.btn-s{padding:6px 13px;border-radius:6px;font-size:11.5px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;border:none;transition:all 0.2s}
+.btn-s.primary{background:var(--navy2);color:#fff}
+.btn-s.primary:hover{background:var(--navy)}
+.btn-s.outline{background:none;border:1.5px solid var(--border);color:var(--text2)}
+.btn-s.dis{background:var(--bg);color:var(--muted);cursor:not-allowed;border:1px solid var(--border)}
+.rp{display:flex;flex-direction:column;gap:12px}
+.pc{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.pc-h{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.pc-h h3{font-size:12.5px;font-weight:800;color:var(--text)}
+.pc-b{padding:12px 14px}
+.perk{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border)}
+.perk:last-child{border-bottom:none}
+.perk-l{display:flex;align-items:center;gap:9px}
+.perk-ic{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px}
+.perk-name{font-size:12px;font-weight:700;color:var(--text)}
+.perk-sub{font-size:10.5px;color:var(--muted);margin-top:1px}
+.perk-arrow{color:var(--muted);font-size:12px;cursor:pointer;transition:color 0.2s}
+.perk-arrow:hover{color:var(--navy2)}
+.hp-layout{display:grid;grid-template-columns:1fr 300px;gap:16px;align-items:start}
+.hp-info-bar{background:var(--blue-bg);border:1px solid rgba(37,99,235,0.15);border-radius:9px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:var(--text2);display:flex;align-items:flex-start;gap:8px}
+.hostel-block{background:var(--card);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:14px}
+.hb-head{padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
+.hb-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px}
+.hb-title{font-size:13.5px;font-weight:800;color:var(--text)}
+.hb-subtitle{font-size:11px;color:var(--muted);margin-left:4px}
+.hb-count{margin-left:auto;font-size:11px;font-weight:700;padding:2px 9px;border-radius:100px;background:var(--progress-bg);color:var(--muted)}
+.hb-count.ok{background:var(--green-bg);color:var(--green-text)}
+.hostel-row{border-bottom:1px solid var(--border)}
+.hostel-row:last-child{border-bottom:none}
+.hr-header{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;transition:background 0.15s;user-select:none}
+.hr-header:hover{background:var(--bg)}
+.hr-sel-count{font-size:10px;font-weight:700;color:var(--muted);white-space:nowrap;min-width:64px;text-align:right}
+.hr-sel-count.has-sel{color:var(--navy2)}
+.hr-name{font-size:13px;font-weight:700;color:var(--text);flex:1}
+.hr-arrow{font-size:11px;color:var(--muted);transition:transform 0.2s;margin-left:6px}
+.hr-arrow.open{transform:rotate(90deg)}
+.hr-rooms{display:none;padding:10px 14px 14px;background:var(--bg);border-top:1px solid var(--border)}
+.hr-rooms.show{display:block}
+.hr-rooms-label{font-size:9.5px;font-weight:700;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px}
+.rt-chips{display:flex;flex-wrap:wrap;gap:6px}
+.rtc{display:flex;align-items:center;gap:6px;padding:5px 11px;border:1.5px solid var(--border);border-radius:7px;background:var(--card);cursor:pointer;transition:all 0.2s;font-size:11.5px;font-weight:600;color:var(--text2);position:relative}
+.rtc:hover:not(.rtc-disabled){border-color:var(--navy2);color:var(--navy2)}
+.rtc.sel{border-color:var(--navy2);background:var(--blue-bg);color:var(--navy2)}
+.rtc.rtc-disabled{opacity:0.4;cursor:not-allowed}
+.rtc-pref-num{position:absolute;top:-6px;right:-6px;width:16px;height:16px;border-radius:50%;background:var(--navy2);color:#fff;font-size:8px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.rtc-check{width:14px;height:14px;border-radius:3px;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0}
+.rtc.sel .rtc-check{background:var(--navy2);border-color:var(--navy2);color:#fff}
+.pref-panel{background:var(--card);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;position:sticky;top:66px}
+.pp-head{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.pp-head h3{font-size:13px;font-weight:800;color:var(--text)}
+.pp-counter{font-size:11px;font-weight:700;padding:2px 9px;border-radius:100px;background:var(--progress-bg);color:var(--muted)}
+.pp-counter.max{background:var(--red-bg);color:var(--red)}
+.pp-counter.ok{background:var(--green-bg);color:var(--green-text)}
+.pp-empty{padding:28px 14px;text-align:center;color:var(--muted);font-size:12px}
+.pp-empty-ic{font-size:26px;margin-bottom:8px}
+.pref-list{padding:8px 10px;display:flex;flex-direction:column;gap:5px;max-height:460px;overflow-y:auto}
+.pref-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;cursor:grab;transition:all 0.2s;user-select:none}
+.pref-item:active{cursor:grabbing;box-shadow:0 4px 18px rgba(10,36,99,0.13);border-color:var(--navy2);background:var(--blue-bg)}
+.pref-item.drag-over{border-color:var(--navy2);border-style:dashed}
+.pref-num{width:22px;height:22px;border-radius:6px;background:var(--navy2);color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pref-info{flex:1;min-width:0}
+.pref-hostel{font-size:11.5px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pref-room{font-size:10.5px;color:var(--muted)}
+.pref-actions{display:flex;gap:4px;flex-shrink:0}
+.pref-btn{width:22px;height:22px;border-radius:5px;border:1px solid var(--border);background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--muted);transition:all 0.15s}
+.pref-btn:hover{border-color:var(--navy2);color:var(--navy2)}
+.pref-btn.del:hover{border-color:var(--red);color:var(--red)}
+.pref-drag-handle{color:var(--muted);font-size:11px;cursor:grab;flex-shrink:0}
+.pp-footer{padding:10px 14px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:6px}
+.pp-status{font-size:11px;color:var(--muted);text-align:center}
+.pp-status.warn{color:var(--orange);font-weight:700}
+.pp-status.ok{color:var(--green);font-weight:700}
+.btn-save-pref{width:100%;padding:10px;background:var(--navy2);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s}
+.btn-save-pref:hover{background:var(--navy)}
+.btn-save-pref:disabled{background:var(--bg);color:var(--muted);cursor:not-allowed;border:1px solid var(--border)}
+.profile-view{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;max-width:700px}
+.profile-header{padding:20px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px}
+.pf-av{width:64px;height:64px;border-radius:14px;background:var(--navy2);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:#fff;flex-shrink:0}
+.pf-name{font-size:18px;font-weight:800;color:var(--text);margin-bottom:3px}
+.pf-sub{font-size:12px;color:var(--muted)}
+.profile-tabs{display:flex;border-bottom:1px solid var(--border)}
+.ptab{flex:1;padding:10px;background:none;border:none;font-family:'Inter',sans-serif;font-size:12.5px;font-weight:700;color:var(--muted);cursor:pointer;transition:all 0.2s;border-bottom:2px solid transparent}
+.ptab.on{color:var(--navy2);border-bottom-color:var(--navy2)}
+.ptab:hover{color:var(--text)}
+.profile-body{padding:20px 22px}
+.pf-section{margin-bottom:20px}
+.pf-sec-title{font-size:11px;font-weight:800;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.pf-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pf-field{padding:11px 13px;background:var(--bg);border-radius:9px;border:1px solid var(--border)}
+.pf-field-lbl{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px}
+.pf-field-val{font-size:13px;font-weight:600;color:var(--text)}
+.pf-field-val.empty{color:var(--muted);font-style:italic;font-weight:400}
+.btn-edit-profile{padding:8px 18px;background:var(--navy2);color:#fff;border:none;border-radius:8px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s}
+.btn-edit-profile:hover{background:var(--navy)}
+.btn-cancel-profile{padding:8px 18px;background:none;border:1.5px solid var(--border);color:var(--text2);border-radius:8px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s}
+.btn-cancel-profile:hover{background:var(--bg)}
+.habit-toggle{display:flex;gap:6px;flex-wrap:wrap}
+.habit-chip{padding:6px 12px;border:1.5px solid var(--border);border-radius:7px;background:var(--bg);cursor:pointer;font-size:11.5px;font-weight:600;color:var(--text2);transition:all 0.18s;font-family:'Inter',sans-serif}
+.habit-chip:hover{border-color:var(--navy2);color:var(--navy2)}
+.habit-chip.sel{border-color:var(--navy2);background:var(--blue-bg);color:var(--navy2)}
+.profile-complete-bar{background:var(--blue-bg);border:1px solid rgba(37,99,235,0.2);border-radius:9px;padding:10px 14px;margin-bottom:16px;display:flex;align-items:center;gap:12px;max-width:700px}
+.pcb-bar{flex:1;height:6px;background:var(--progress-bg);border-radius:100px;overflow:hidden}
+.pcb-fill{height:100%;border-radius:100px;background:var(--navy2);transition:width 0.4s}
+.rm-profile-card{background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:14px;transition:all 0.2s}
+.rm-profile-card:hover{border-color:var(--navy2);box-shadow:0 4px 16px rgba(10,36,99,0.1);transform:translateY(-1px)}
+.rm-av-big{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0}
+.rm-name{font-size:13px;font-weight:800;color:var(--text);margin-bottom:1px}
+.rm-meta{font-size:10.5px;color:var(--muted);margin-bottom:8px}
+.rm-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
+.rm-tag{font-size:9.5px;font-weight:600;padding:2px 7px;border-radius:100px;background:var(--bg);border:1px solid var(--border);color:var(--text2)}
+.rm-compat{display:flex;align-items:center;gap:6px;margin-bottom:10px}
+.rm-compat-bar{flex:1;height:5px;background:var(--progress-bg);border-radius:100px;overflow:hidden}
+.rm-compat-fill{height:100%;border-radius:100px}
+.rm-compat-pct{font-size:10.5px;font-weight:700}
+.btn-rm-req{width:100%;padding:8px;background:var(--navy2);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;margin-top:4px}
+.btn-rm-req:hover{background:var(--navy)}
+.btn-rm-req.sent{background:var(--green);cursor:default}
+.rm-filter-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.rm-filter-bar input,.rm-filter-bar select{padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:12.5px;outline:none;transition:border 0.2s}
+.rm-filter-bar input:focus,.rm-filter-bar select:focus{border-color:var(--navy2)}
+.rm-filter-bar input{flex:1;min-width:160px}
+.fg{margin-bottom:11px}
+.fg label{display:block;font-size:10px;font-weight:700;color:var(--text2);margin-bottom:4px;letter-spacing:0.04em;text-transform:uppercase}
+.fg input,.fg select,.fg textarea{width:100%;padding:9px 12px;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Inter',sans-serif;outline:none;transition:border 0.2s;appearance:none;font-weight:500;resize:none}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--navy2);box-shadow:0 0 0 3px rgba(37,99,235,0.07)}
+.fg input:disabled,.fg select:disabled{opacity:0.6;cursor:not-allowed}
+.fgr{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.status-pill{padding:2px 8px;border-radius:100px;font-size:10px;font-weight:700}
+.otp-input{width:100%;padding:14px;border:2px solid var(--border);border-radius:8px;font-size:22px;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);letter-spacing:0.3em;text-align:center;outline:none;transition:border 0.2s}
+.otp-input:focus{border-color:var(--navy2);box-shadow:0 0 0 3px rgba(37,99,235,0.07)}
+.step-progress{display:flex;background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:18px}
+.sp-item{flex:1;display:flex;align-items:center;gap:10px;padding:14px 18px;border-right:1px solid var(--border);position:relative}
+.sp-item:last-child{border-right:none}
+.sp-item.done{background:var(--green-bg)}
+.sp-item.active{background:var(--blue-bg)}
+.sp-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
+.sp-num.done{background:var(--green);color:#fff}
+.sp-num.active{background:var(--navy2);color:#fff}
+.sp-num.inactive{background:var(--progress-bg);color:var(--muted)}
+.sp-title{font-size:12px;font-weight:700;color:var(--text)}
+.sp-sub{font-size:10px;color:var(--muted)}
+.chat-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.5);display:none;align-items:flex-end;justify-content:flex-end;padding:20px}
+.chat-overlay.open{display:flex}
+.chat-window{width:380px;height:520px;background:var(--card);border-radius:16px;border:1px solid var(--border);display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,0.2);overflow:hidden}
+.chat-header{padding:14px 16px;background:linear-gradient(135deg,#1E3A8A,#2563EB);display:flex;align-items:center;gap:10px}
+.chat-header-av{width:36px;height:36px;border-radius:9px;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0}
+.chat-header-name{font-size:13px;font-weight:800;color:#fff}
+.chat-header-status{font-size:10.5px;color:rgba(255,255,255,0.7)}
+.chat-close{margin-left:auto;width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,0.15);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:background 0.2s}
+.chat-close:hover{background:rgba(255,255,255,0.25)}
+.chat-messages{flex:1;padding:14px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;background:var(--bg)}
+.chat-messages::-webkit-scrollbar{width:4px}
+.chat-messages::-webkit-scrollbar-track{background:transparent}
+.chat-messages::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.msg-row{display:flex;gap:8px;align-items:flex-end}
+.msg-row.mine{flex-direction:row-reverse}
+.msg-av{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#fff;flex-shrink:0}
+.msg-bubble{max-width:72%;padding:9px 13px;border-radius:12px;font-size:12.5px;line-height:1.5;word-break:break-word}
+.msg-row:not(.mine) .msg-bubble{background:var(--card);border:1px solid var(--border);color:var(--text);border-bottom-left-radius:4px}
+.msg-row.mine .msg-bubble{background:var(--navy2);color:#fff;border-bottom-right-radius:4px}
+.msg-time{font-size:9.5px;color:var(--muted);margin-top:3px;text-align:right}
+.msg-row:not(.mine) .msg-time{text-align:left}
+.chat-input-row{padding:12px;border-top:1px solid var(--border);display:flex;gap:8px;background:var(--card)}
+.chat-input{flex:1;padding:9px 13px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);font-size:13px;font-family:'Inter',sans-serif;outline:none;transition:border 0.2s}
+.chat-input:focus{border-color:var(--navy2)}
+.chat-send-btn{width:38px;height:38px;border-radius:9px;background:var(--navy2);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:background 0.2s;flex-shrink:0}
+.chat-send-btn:hover{background:var(--navy)}
+.chat-fab{position:fixed;bottom:24px;right:24px;z-index:150;width:52px;height:52px;border-radius:50%;background:var(--navy2);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 6px 20px rgba(37,99,235,0.4);transition:all 0.2s}
+.chat-fab:hover{background:var(--navy);transform:scale(1.05)}
+.chat-fab-badge{position:absolute;top:4px;right:4px;width:16px;height:16px;border-radius:50%;background:var(--red);border:2px solid #fff;font-size:8px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center}
+.rm-chat-btn{padding:6px 12px;background:var(--teal);color:#fff;border:none;border-radius:7px;font-size:11.5px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-top:6px;width:100%;transition:all 0.2s}
+.rm-chat-btn:hover{background:var(--teal);opacity:0.85}
+.warden-card{background:var(--card);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:14px;transition:all 0.2s}
+.warden-card:hover{border-color:var(--navy2);box-shadow:0 4px 16px rgba(10,36,99,0.08)}
+.warden-card-head{padding:13px 16px;background:var(--blue-bg);border-bottom:1px solid rgba(37,99,235,0.15);display:flex;align-items:center;gap:12px}
+.warden-av{width:40px;height:40px;border-radius:10px;background:var(--navy2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0}
+.warden-name{font-size:13.5px;font-weight:800;color:var(--text)}
+.warden-dept{font-size:11px;color:var(--muted)}
+.warden-block-badge{margin-left:auto;font-size:10px;font-weight:700;padding:3px 10px;border-radius:100px;background:var(--navy2);color:#fff;white-space:nowrap}
+.warden-body{padding:13px 16px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.warden-info-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2)}
+.warden-info-item span:first-child{font-size:14px;flex-shrink:0}
+.warden-info-item a{color:var(--navy2);text-decoration:none;font-weight:600}
+.warden-info-item a:hover{text-decoration:underline}
+.fee-table{width:100%;border-collapse:collapse;font-size:11.5px}
+.fee-table th{padding:8px 10px;text-align:center;font-size:9px;font-weight:700;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;border:1px solid var(--border);background:var(--bg)}
+.fee-table td{padding:8px 10px;text-align:center;border:1px solid var(--border);color:var(--text2)}
+.fee-table td:first-child{text-align:left;font-weight:600;color:var(--text)}
+.fee-table tr:hover td{background:var(--bg)}
+.fee-table .total-row td{font-weight:800;color:var(--navy2);background:var(--blue-bg)}
+.fee-table .total-row td:first-child{color:var(--navy2)}
+.fee-section{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px}
+.fee-section-head{padding:12px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+#auth-page{position:fixed;inset:0;z-index:999;background:var(--navy);display:flex;align-items:center;justify-content:center;overflow:auto}
+.auth-grid{display:grid;grid-template-columns:1fr 420px;min-height:100vh;width:100%;max-width:1100px;margin:auto;align-items:center}
+.auth-left{padding:60px 48px;color:#fff}
+.al-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:100px;padding:5px 14px;margin-bottom:24px}
+.al-badge span{font-size:10.5px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.7)}
+.al-h1{font-size:clamp(28px,3.5vw,46px);font-weight:800;line-height:1.1;letter-spacing:-0.8px;margin-bottom:14px}
+.al-h1 em{font-style:italic;color:#93C5FD}
+.al-p{font-size:14px;color:rgba(255,255,255,0.5);line-height:1.8;max-width:380px;margin-bottom:28px}
+.al-steps{display:flex;flex-direction:column;gap:12px}
+.al-step{display:flex;align-items:center;gap:12px}
+.al-step-num{width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:rgba(255,255,255,0.7);flex-shrink:0}
+.al-step-txt{font-size:12.5px;color:rgba(255,255,255,0.55)}
+.auth-right{background:var(--card);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 36px}
+.auth-box{width:100%;max-width:360px}
+.auth-tabs{display:flex;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:3px;margin-bottom:22px}
+.auth-tab{flex:1;padding:8px;background:none;border:none;color:var(--muted);font-size:12.5px;font-weight:700;border-radius:7px;cursor:pointer;transition:all 0.2s;font-family:'Inter',sans-serif}
+.auth-tab.on{background:var(--card);color:var(--navy2);box-shadow:0 1px 6px rgba(10,36,99,0.08)}
+.auth-title{font-size:20px;font-weight:800;color:var(--text);margin-bottom:3px}
+.auth-sub{font-size:12px;color:var(--muted);margin-bottom:18px}
+.gender-toggle{display:flex;gap:8px;margin-bottom:11px}
+.gt{flex:1;padding:10px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);cursor:pointer;text-align:center;transition:all 0.2s;font-family:'Inter',sans-serif}
+.gt:hover{border-color:var(--navy2)}
+.gt.sel-m{border-color:#2563EB;background:var(--blue-bg)}
+.gt.sel-f{border-color:#9333EA;background:var(--purple-bg)}
+.gt-icon{font-size:20px;margin-bottom:3px}
+.gt-lbl{font-size:12px;font-weight:700;color:var(--text)}
+.gt-sub{font-size:10px;color:var(--muted)}
+.btn-auth{width:100%;padding:11px;background:var(--navy2);color:#fff;border:none;border-radius:9px;font-size:13.5px;font-weight:800;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;margin-top:5px;box-shadow:0 3px 12px rgba(37,99,235,0.22)}
+.btn-auth:hover{background:var(--navy)}
+.or-d{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:10.5px;margin:11px 0;text-transform:uppercase}
+.or-d::before,.or-d::after{content:'';flex:1;height:1px;background:var(--border)}
+.btn-goog{width:100%;padding:9px;background:var(--card);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;gap:9px;transition:all 0.2s}
+.btn-goog:hover{background:var(--bg)}
+#warden-auth-page{position:fixed;inset:0;z-index:1000;background:linear-gradient(135deg,#1E3A8A,#4C1D95);display:none;align-items:center;justify-content:center}
+#warden-auth-page.open{display:flex}
+.warden-login-box{background:var(--card);border-radius:16px;padding:36px;width:100%;max-width:400px;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+#warden-dashboard{position:fixed;top:0;left:0;right:0;bottom:0;z-index:997;background:var(--bg);display:none;flex-direction:column;overflow-y:scroll;height:100vh}
+#warden-dashboard.open{display:flex}
+.warden-topbar{height:54px;background:linear-gradient(90deg,#1E3A8A,#2563EB);display:flex;align-items:center;padding:0 24px;gap:12px;position:sticky;top:0;z-index:10}
+.warden-topbar-title{font-size:15px;font-weight:800;color:#fff;flex:1}
+.warden-dashboard-body{
+  padding:28px 32px;
+  max-width:1100px;
+  margin:0 auto;
+  width:100%;
+  font-size:16px;
+  zoom:0.62;
+}.floor-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.floor-stats{display:flex;gap:12px;font-size:11px;font-weight:700}
+.room-cell{background:var(--card);border:1.5px solid var(--border);border-radius:8px;padding:8px;cursor:pointer;transition:all 0.2s;text-align:center}
+.room-cell:hover{transform:scale(1.05);box-shadow:0 4px 12px rgba(0,0,0,0.1)}
+.room-cell.vacant{border-color:var(--green);background:var(--green-bg)}
+.room-cell.partial{border-color:var(--orange);background:var(--orange-bg)}
+.room-cell.full{border-color:var(--red);background:var(--red-bg)}
+.room-cell.reserved{border-color:var(--navy2);background:var(--blue-bg)}
+.room-cell-num{font-size:12px;font-weight:800;color:var(--text)}
+.room-cell-type{font-size:8.5px;color:var(--text2);margin:3px 0}
+.room-cell-occ{font-size:10px;font-weight:700;color:var(--text2)}
+.toast{position:fixed;bottom:22px;right:22px;z-index:9999;background:#12131A;border:1px solid rgba(96,165,250,0.2);border-radius:10px;padding:11px 16px;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#fff;box-shadow:0 12px 36px rgba(0,0,0,0.3);transform:translateY(20px) scale(0.96);opacity:0;transition:all 0.3s cubic-bezier(.22,.68,0,1.2);pointer-events:none;max-width:320px}
+.toast.show{transform:none;opacity:1;pointer-events:auto}
+.rm-my-panel{background:var(--card);border:1.5px solid var(--navy2);border-radius:12px;overflow:hidden}
+.rm-my-panel-head{padding:11px 14px;background:var(--blue-bg);border-bottom:1px solid rgba(37,99,235,0.2);display:flex;align-items:center;justify-content:space-between}
+.rm-my-panel-head h3{font-size:12.5px;font-weight:800;color:var(--navy2)}
+.rm-pf-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--border)}
+.rm-pf-row:last-child{border-bottom:none}
+.rm-pf-lbl{font-size:10px;color:var(--muted);min-width:70px;font-weight:600}
+.rm-pf-val{font-size:11.5px;color:var(--text);font-weight:600;flex:1}
+.rm-pf-val.empty{color:var(--muted);font-style:italic;font-weight:400;font-size:11px}
+.req-item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)}
+.req-item:last-child{border-bottom:none}
+.req-av{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;flex-shrink:0}
+.grp-member{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:9px;border:1px solid var(--border);margin-bottom:7px}
+.pf-photo-wrap{position:relative;cursor:pointer}
+.pf-photo-overlay{position:absolute;inset:0;border-radius:14px;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s;font-size:18px}
+.pf-photo-wrap:hover .pf-photo-overlay{opacity:1}
+@media(max-width:900px){.sc-row{grid-template-columns:repeat(2,1fr)}.mg{grid-template-columns:1fr}.auth-grid{grid-template-columns:1fr}.auth-left{display:none}.auth-right{min-height:auto;padding:32px 24px}.hp-layout{grid-template-columns:1fr}.pf-grid{grid-template-columns:1fr}.step-progress{flex-direction:column}}
+@media(max-width:600px){.sidebar{width:54px}.sb-lbl,.sb-sec,.sb-lt,.sb-ls,.sb-un,.sb-ue{display:none}.main{margin-left:54px}.page{padding:14px 16px}}
+</style>
+</head>
+<body>
+
+<!-- AUTH PAGE -->
+<div id="auth-page">
+  <div class="auth-grid">
+    <div class="auth-left">
+      <div class="al-badge">🏛️ <span>VIT Bhopal University</span></div>
+      <div class="al-h1">Your hostel.<br/>Your room.<br/>Your <em>choice.</em></div>
+      <p class="al-p">Apply for hostel accommodation at VIT Bhopal. Rank preferences, choose your room type, and find your perfect roommate.</p>
+      <div class="al-steps">
+        <div class="al-step"><div class="al-step-num">1</div><div class="al-step-txt">Register with your VIT Bhopal email</div></div>
+        <div class="al-step"><div class="al-step-num">2</div><div class="al-step-txt">Select hostel &amp; room type preferences</div></div>
+        <div class="al-step"><div class="al-step-num">3</div><div class="al-step-txt">Wait for allocation result</div></div>
+        <div class="al-step"><div class="al-step-num">4</div><div class="al-step-txt">Find roommate → Confirm → Submit to Warden</div></div>
+      </div>
+      <div style="margin-top:28px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.1)">
+        <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.1em;font-weight:700">Staff Access</div>
+        <button onclick="openWardenAuth()" style="padding:10px 20px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:9px;color:#fff;font-size:12.5px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s" onmouseover="this.style.background='rgba(255,255,255,0.18)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">🛡️ Warden / Faculty Login →</button>
+      </div>
+    </div>
+    <div class="auth-right">
+      <div class="auth-box">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:22px">
+          <div style="width:32px;height:32px;border-radius:8px;background:var(--navy2);display:flex;align-items:center;justify-content:center;font-size:16px">🏛️</div>
+          <div><div style="font-size:13px;font-weight:800;color:var(--text)">VIT Bhopal HMS</div><div style="font-size:10px;color:var(--muted)">Hostel Management System</div></div>
+        </div>
+        <div class="auth-tabs">
+          <button class="auth-tab on" id="at-login" onclick="authTab('login')">Sign In</button>
+          <button class="auth-tab" id="at-signup" onclick="authTab('signup')">Create Account</button>
+        </div>
+        <div id="auth-login">
+          <div class="auth-title">Welcome back</div>
+          <div class="auth-sub">Sign in with your VIT Bhopal credentials.</div>
+          <div class="fg"><label>VIT Email</label><input type="email" id="l-email" placeholder="reg@vitbhopal.ac.in"/></div>
+          <div class="fg"><label>Password</label><input type="password" id="l-pass" placeholder="••••••••"/></div>
+          <button class="btn-auth" onclick="doLogin()">Sign In →</button>
+          <div class="or-d">or</div>
+          <button class="btn-goog" onclick="doGoogleAuth()"><svg width="15" height="15" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>Continue with Google</button>
+        </div>
+        <div id="auth-signup" style="display:none">
+          <div class="auth-title">Create Account</div>
+          <div class="auth-sub">Register with your VIT Bhopal email.</div>
+          <div class="fg"><label>Full Name</label><input type="text" id="s-name" placeholder="As per ID card"/></div>
+          <div class="fgr">
+            <div class="fg"><label>VIT Email</label><input type="email" id="s-email" placeholder="reg@vitbhopal.ac.in"/></div>
+            <div class="fg"><label>Password</label><input type="password" id="s-pass" placeholder="Min 6 chars"/></div>
+          </div>
+          <div class="fgr">
+            <div class="fg"><label>Reg. No.</label><input type="text" id="s-regno" placeholder="24BCE..."/></div>
+            <div class="fg"><label>Year</label><select id="s-year"><option value="">Select...</option><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option><option>PG</option></select></div>
+          </div>
+          <div class="fg"><label>Branch</label><select id="s-branch"><option value="">Select...</option><option>B.Tech CSE</option><option>B.Tech ECE</option><option>B.Tech ME</option><option>B.Tech Civil</option><option>BCA</option><option>MBA</option><option>MCA</option><option>Other</option></select></div>
+          <div class="fg"><label>Gender</label></div>
+          <div class="gender-toggle">
+            <div class="gt" id="gt-m" onclick="selGender('M')"><div class="gt-icon">👦</div><div class="gt-lbl">Male</div><div class="gt-sub">Boys Hostels</div></div>
+            <div class="gt" id="gt-f" onclick="selGender('F')"><div class="gt-icon">👧</div><div class="gt-lbl">Female</div><div class="gt-sub">Girls Hostels</div></div>
+          </div>
+          <input type="hidden" id="s-gender" value=""/>
+          <div class="fgr">
+            <div class="fg"><label>State</label><select id="s-state"><option value="">Select...</option><option>Uttar Pradesh</option><option>Madhya Pradesh</option><option>Maharashtra</option><option>Delhi</option><option>Rajasthan</option><option>Other</option></select></div>
+            <div class="fg"><label>City</label><input type="text" id="s-city" placeholder="Your city"/></div>
+          </div>
+          <button class="btn-auth" onclick="doSignup()">Create Account →</button>
+          <div class="or-d">or</div>
+          <button class="btn-goog" onclick="doGoogleAuth()"><svg width="15" height="15" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>Continue with Google</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WARDEN AUTH PAGE -->
+<div id="warden-auth-page">
+  <div class="warden-login-box">
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,#1E3A8A,#7C3AED);display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 12px">🛡️</div>
+      <div style="font-size:18px;font-weight:800;color:var(--text)">Warden / Faculty Portal</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px">VIT Bhopal Hostel Management System</div>
+    </div>
+    <div class="fg"><label>Faculty/Warden Email</label><input type="email" id="w-email" placeholder="fr.block1a@vitbhopal.ac.in"/></div>
+    <div class="fg"><label>Password</label><input type="password" id="w-pass" placeholder="••••••••"/></div>
+    <div class="fg"><label>Your Block / Hostel</label>
+      <select id="w-block">
+        <option value="">Select your block...</option>
+        <option value="Boys Block 1">Boys' Hostel Block 1</option>
+        <option value="Boys Block 2">Boys' Hostel Block 2</option>
+        <option value="Boys Block 3">Boys' Hostel Block 3</option>
+        <option value="Boys Block 4">Boys' Hostel Block 4</option>
+        <option value="Boys Block 5">Boys' Hostel Block 5</option>
+        <option value="Boys Block 6">Boys' Hostel Block 6</option>
+        <option value="Boys Block 7">Boys' Hostel Block 7</option>
+        <option value="Boys Block 8">Boys' Hostel Block 8</option>
+        <option value="Girls Block 1">Girls' Hostel Block 1</option>
+        <option value="Girls Block 2">Girls' Hostel Block 2</option>
+        <option value="Spl Block">Special Block</option>
+      </select>
+    </div>
+    <button class="btn-auth" onclick="doWardenLogin()" style="margin-top:4px">Enter Warden Portal →</button>
+    <button onclick="closeWardenAuth()" style="width:100%;margin-top:8px;padding:9px;background:none;border:1.5px solid var(--border);border-radius:8px;color:var(--text2);font-size:12.5px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">← Back to Student Login</button>
+    <div style="margin-top:14px;background:var(--blue-bg);border:1px solid rgba(37,99,235,0.2);border-radius:8px;padding:9px 12px;font-size:11px;color:var(--text2)">
+      🔑 <b>Demo:</b> Enter any email, password "warden123", and select a block.
+    </div>
+  </div>
+</div>
+
+<!-- WARDEN DASHBOARD -->
+<div id="warden-dashboard">
+  <div class="warden-topbar">
+    <div style="width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">🛡️</div>
+    <div class="warden-topbar-title">Warden Portal — <span id="wd-block-title">Block</span></div>
+    <div style="font-size:12px;color:rgba(255,255,255,0.7)" id="wd-name-top">Dr. Warden</div>
+    <button onclick="closeWardenDashboard()" style="margin-left:16px;padding:7px 16px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.2);border-radius:7px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s" onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">← Log Out</button>
+  </div>
+  <div class="warden-dashboard-body">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px">
+      <div class="sc"><div class="sc-lbl">Pending Requests <span>📋</span></div><div class="sc-val" id="wd-pending-count">3</div><div class="sc-sub">Awaiting review</div></div>
+      <div class="sc"><div class="sc-lbl">Approved Today <span>✅</span></div><div class="sc-val">7</div><div class="sc-sub">Rooms assigned</div></div>
+      <div class="sc"><div class="sc-lbl">Total Students <span>👥</span></div><div class="sc-val">248</div><div class="sc-sub">In your block</div></div>
+      <div class="sc"><div class="sc-lbl">Vacant Rooms <span>🏠</span></div><div class="sc-val">14</div><div class="sc-sub">Available now</div></div>
+    </div><div style="margin-bottom:18px;display:flex;gap:10px">
+  <button onclick="showWardenTab('requests')" id="wtab-requests" style="padding:9px 20px;background:var(--navy2);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">📥 Room Requests</button>
+  <button onclick="showWardenTab('roommap')" id="wtab-roommap" style="padding:9px 20px;background:var(--bg);color:var(--text2);border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">🗺️ Room Map</button>
+</div>
+<div id="wd-tab-requests">
+<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:18px">
+    <div style="padding:13px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+      <span style="font-size:14px;font-weight:800;color:var(--text)">📥 Incoming Room Group Requests</span>
+      <span style="font-size:11px;color:var(--muted)">Review and assign room numbers</span>
+    </div>
+    <div id="wd-requests-list" style="padding:14px;display:flex;flex-direction:column;gap:10px"></div>
+  </div>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+    <div style="padding:13px 18px;border-bottom:1px solid var(--border)"><span style="font-size:14px;font-weight:800;color:var(--text)">📊 Recent Activity</span></div>
+    <div style="padding:14px">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 13px;background:var(--green-bg);border:1px solid rgba(22,163,74,0.2);border-radius:9px"><span style="font-size:13px">✅</span><div style="flex:1"><span style="font-size:12.5px;font-weight:700;color:var(--green-text)">Room H3-210 assigned</span><span style="font-size:11px;color:var(--muted);margin-left:8px">Rahul Kumar + Arjun Kumar</span></div><span style="font-size:10.5px;color:var(--muted)">2 hours ago</span></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 13px;background:var(--blue-bg);border:1px solid rgba(37,99,235,0.15);border-radius:9px"><span style="font-size:16px">📋</span><div style="flex:1"><span style="font-size:12.5px;font-weight:700;color:var(--navy2)">New request received</span><span style="font-size:11px;color:var(--muted);margin-left:8px">Saurabh Patel + Mihir Verma</span></div><span style="font-size:10.5px;color:var(--muted)">5 hours ago</span></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 13px;background:var(--bg);border:1px solid var(--border);border-radius:9px"><span style="font-size:16px">🔔</span><div style="flex:1"><span style="font-size:12.5px;font-weight:700;color:var(--text)">Preferences window closes in 5 days</span></div><span style="font-size:10.5px;color:var(--muted)">June 15</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="wd-tab-roommap" style="display:none">
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:18px">
+    <div style="padding:13px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <span style="font-size:14px;font-weight:800;color:var(--text)">🗺️ Room Map</span>
+      <select id="wd-floor-select" onchange="renderRoomMap()" style="padding:6px 12px;border:1.5px solid var(--border);border-radius:7px;background:var(--bg);color:var(--text);font-family:Inter,sans-serif;font-size:12.5px;outline:none">
+        <option value="0">All Floors</option>
+        <option value="1">Floor 1</option>
+        <option value="2">Floor 2</option>
+        <option value="3">Floor 3</option>
+        <option value="4">Floor 4</option>
+        <option value="5">Floor 5</option>
+      </select>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-left:auto">
+        <span style="display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--text2)"><span style="width:12px;height:12px;border-radius:3px;background:var(--green);display:inline-block"></span>Vacant</span>
+        <span style="display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--text2)"><span style="width:12px;height:12px;border-radius:3px;background:var(--orange);display:inline-block"></span>Partial</span>
+        <span style="display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--text2)"><span style="width:12px;height:12px;border-radius:3px;background:var(--red);display:inline-block"></span>Full</span>
+        <span style="display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--text2)"><span style="width:12px;height:12px;border-radius:3px;background:var(--navy2);display:inline-block"></span>Reserved</span>
+      </div>
+    </div>
+    <div style="padding:18px;background:#0d1117;border-radius:0 0 10px 10px">
+      <div id="room-map-grid" style="display:grid;grid-template-columns:repeat(10,1fr);gap:6px"></div>
+    </div>
+  </div>
+  <div id="room-detail-panel" style="display:none;background:var(--card);border:1.5px solid var(--navy2);border-radius:12px;padding:18px;margin-bottom:18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <span style="font-size:14px;font-weight:800;color:var(--text)" id="rdp-room-no">Room Details</span>
+      <button onclick="document.getElementById('room-detail-panel').style.display='none'" style="padding:4px 12px;background:none;border:1.5px solid var(--border);border-radius:6px;cursor:pointer;font-family:Inter,sans-serif;font-size:12px;color:var(--text2)">✕ Close</button>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px">
+      <div style="padding:10px 13px;background:var(--bg);border-radius:9px;border:1px solid var(--border)"><div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:4px">Room Type</div><div style="font-size:13px;font-weight:700;color:var(--text)" id="rdp-type">—</div></div>
+      <div style="padding:10px 13px;background:var(--bg);border-radius:9px;border:1px solid var(--border)"><div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:4px">Occupancy</div><div style="font-size:13px;font-weight:700;color:var(--text)" id="rdp-occ">—</div></div>
+      <div style="padding:10px 13px;background:var(--bg);border-radius:9px;border:1px solid var(--border)"><div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:4px">Status</div><div style="font-size:13px;font-weight:700;color:var(--text)" id="rdp-status">—</div></div>
+    </div>
+    <div id="rdp-members" style="display:flex;flex-direction:column;gap:6px"></div>
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- SIDEBAR -->
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sb-logo"><div class="sb-lm">🏛️</div><div><div class="sb-lt">VIT Bhopal</div><div class="sb-ls">Hostel HMS</div></div></div>
+  <div class="sb-nav">
+    <div class="sb-sec">Main</div>
+    <div class="sb-a on" id="snav-overview" onclick="showPage('overview')"><span class="sb-ic">⊞</span><span class="sb-lbl">Overview</span></div>
+    <div class="sb-a" id="snav-hostel" onclick="showPage('hostel')"><span class="sb-ic">🏠</span><span class="sb-lbl">Hostel Preference</span><span class="sb-bdg or" id="sb-pref-bdg">!</span></div>
+    <div class="sb-sec">After Allocation</div>
+<div class="sb-a" id="snav-opengroups" onclick="showPage('opengroups')"><span class="sb-ic">🟢</span><span class="sb-lbl">Open Groups</span><span class="sb-bdg" style="background:var(--green)">3</span></div>
+            <div class="sb-a" id="snav-roommate" onclick="showPage('roommate')"><span class="sb-ic">👥</span><span class="sb-lbl">Roommate Finder</span></div>
+    <div class="sb-a" id="snav-confirmroommate" onclick="showPage('confirmroommate')"><span class="sb-ic">🤝</span><span class="sb-lbl">Confirm Roommate</span></div>
+    <div class="sb-a" id="snav-wardenrequest" onclick="showPage('wardenrequest')"><span class="sb-ic">📋</span><span class="sb-lbl">Warden Request</span></div>
+    <div class="sb-sec">Account</div>
+    <div class="sb-a" id="snav-profile" onclick="showPage('profile')"><span class="sb-ic">👤</span><span class="sb-lbl">My Profile</span></div>
+    <div class="sb-a" id="snav-roomhistory" onclick="showPage('roomhistory')"><span class="sb-ic">📊</span><span class="sb-lbl">Room History</span></div>
+    <div class="sb-a" id="snav-fees" onclick="showPage('fees')"><span class="sb-ic">💰</span><span class="sb-lbl">Fee Structure</span></div>
+    <div class="sb-a" id="snav-wardens" onclick="showPage('wardens')"><span class="sb-ic">🛡️</span><span class="sb-lbl">Warden Directory</span></div>
+  </div>
+  <div class="sb-bot">
+    <div class="sb-usr"><div class="sb-av" id="sb-av-initials">RK</div><div><div class="sb-un" id="sb-username">Student</div><div class="sb-ue" id="sb-userreg">Reg No.</div></div></div>
+    <div class="sb-a" style="margin-top:4px" onclick="doLogout()"><span class="sb-ic">↩</span><span class="sb-lbl">Log Out</span></div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <div class="bc">HMS / <b id="bc-label">Overview</b></div>
+    <div class="tb-r">
+      <button class="ico-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
+      <div class="ico-btn" onclick="openWardenAuth()" title="Warden Portal">🛡️</div>
+      <div class="ico-btn">🔔<div class="ndot"></div></div>
+      <div class="tb-usr"><div class="sb-av" style="width:26px;height:26px;font-size:10px" id="tb-av">RK</div><span class="tb-un" id="tb-uname">Student</span></div>
+    </div>
+  </div>
+
+  <!-- OVERVIEW PAGE -->
+  <div class="page active" id="page-overview">
+    <div class="ph"><h1 id="welcome-h1">Welcome 👋</h1><p>Complete your hostel application to secure your room.</p></div>
+    <div class="sc-row">
+      <div class="sc"><div class="sc-lbl">Journey Progress <span>📈</span></div><div class="sc-val">17%</div><div class="sc-sub">1 of 6 steps done</div></div>
+      <div class="sc"><div class="sc-lbl">Current Stage <span>📍</span></div><div class="sc-val" style="font-size:14px;margin-top:4px">Hostel Pref.</div><div class="sc-sub">Step 2 of 6</div></div>
+      <div class="sc"><div class="sc-lbl">Next Milestone <span>🎯</span></div><div class="sc-val" style="font-size:13px;margin-top:4px">Room Allocation</div><div class="sc-sub">Fill preferences first</div></div>
+      <div class="sc"><div class="sc-lbl">Window Closes <span>⏱️</span></div><div class="sc-val">5 Days</div><div class="sc-sub">June 15, 2026</div></div>
+    </div>
+    <div class="jb">
+      <div class="jb-top"><div class="jb-t">Your Hostel Journey</div><div class="jb-pct">17% Complete</div></div>
+      <div class="jb-sub">1 of 6 milestones completed · Keep going! 🚀</div>
+      <div class="jb-bar"><div class="jb-fill" style="width:17%"></div></div>
+    </div>
+    <div class="mg">
+      <div class="steps-card">
+        <div class="steps-head"><h2>Follow the journey to unlock everything</h2></div>
+        <div class="tl">
+          <div class="tl-node"><div class="tl-step-num done">Step 1</div><div class="tl-c done">✓</div><div class="tl-lbl done">Register</div></div>
+          <div class="tl-connector"><div class="tl-connector-track done"></div></div>
+          <div class="tl-node"><div class="tl-step-num active">Step 2</div><div class="tl-c active">2</div><div class="tl-lbl active">Preference</div></div>
+          <div class="tl-connector"><div class="tl-connector-track active-grad"></div></div>
+          <div class="tl-node"><div class="tl-step-num">Step 3</div><div class="tl-c pending">3</div><div class="tl-lbl pending">Allocation</div></div>
+          <div class="tl-connector"><div class="tl-connector-track"></div></div>
+          <div class="tl-node"><div class="tl-step-num">Step 4</div><div class="tl-c locked">4</div><div class="tl-lbl">Find Roommate</div></div>
+          <div class="tl-connector"><div class="tl-connector-track"></div></div>
+          <div class="tl-node"><div class="tl-step-num">Step 5</div><div class="tl-c locked">5</div><div class="tl-lbl">Confirm Group</div></div>
+          <div class="tl-connector"><div class="tl-connector-track"></div></div>
+          <div class="tl-node"><div class="tl-step-num">Step 6</div><div class="tl-c locked" style="font-size:12px">6</div><div class="tl-lbl">Warden OK</div></div>
+        </div>
+        <div class="si"><div class="si-iw done">✅</div><div class="si-body"><div class="si-top"><div class="si-title">Step 1 — Registration</div><div class="si-b done">Completed</div></div><div class="si-desc">Account created with VIT Bhopal credentials.</div><div class="si-meta">Completed 5 June 2026</div></div><div class="si-act"><button class="btn-s outline" onclick="showPage('profile')">View</button></div></div>
+        <div class="si" style="background:var(--blue-bg)" onclick="showPage('hostel')"><div class="si-iw active">🏠</div><div class="si-body"><div class="si-top"><div class="si-title">Step 2 — Hostel Preference</div><div class="si-b active">In Progress</div></div><div class="si-desc">Select hostels &amp; tick room types. Each combination becomes a numbered preference.</div><div class="si-meta">⏳ Closes in 5 days · Min 8 required (max 15)</div></div><div class="si-act"><button class="btn-s primary" onclick="event.stopPropagation();showPage('hostel')">Fill Now →</button></div></div>
+        <div class="si"><div class="si-iw pending">📬</div><div class="si-body"><div class="si-top"><div class="si-title">Step 3 — Allocation Processing</div><div class="si-b pending">Pending</div></div><div class="si-desc">Administration processes all preferences. Takes 2–3 working days after window closes.</div><div class="si-meta">⏳ Starts after June 15, 2026</div></div><div class="si-act"><button class="btn-s dis" disabled>Waiting</button></div></div>
+        <div class="si" onclick="showPage('roommate')"><div class="si-iw active">👥</div><div class="si-body"><div class="si-top"><div class="si-title">Step 4 — Roommate Finder</div><div class="si-b active">Open Now</div></div><div class="si-desc">Browse student profiles by habits, year, branch and send roommate requests.</div><div class="si-meta">🟢 Active — Browse &amp; shortlist</div></div><div class="si-act"><button class="btn-s primary" onclick="event.stopPropagation();showPage('roommate')">Browse →</button></div></div>
+        <div class="si" onclick="showPage('confirmroommate')"><div class="si-iw active">🤝</div><div class="si-body"><div class="si-top"><div class="si-title">Step 5 — Confirm Your Roommate</div><div class="si-b active">Open Now</div></div><div class="si-desc">Enter roommate's Reg. No., send OTP to their email, verify and form your room group.</div><div class="si-meta">🟢 72 hrs to confirm pairing</div></div><div class="si-act"><button class="btn-s primary" onclick="event.stopPropagation();showPage('confirmroommate')">Confirm →</button></div></div>
+        <div class="si" onclick="showPage('wardenrequest')"><div class="si-iw active">📋</div><div class="si-body"><div class="si-top"><div class="si-title">Step 6 — Warden Request</div><div class="si-b active">Open Now</div></div><div class="si-desc">Submit your confirmed group to the warden. Warden approves and assigns your room number.</div><div class="si-meta">🟢 Any group member can submit</div></div><div class="si-act"><button class="btn-s primary" onclick="event.stopPropagation();showPage('wardenrequest')">Submit →</button></div></div>
+      </div>
+      <div class="rp">
+        <div class="pc">
+          <div class="pc-h"><h3>Quick Access</h3></div>
+          <div class="pc-b" style="padding:4px 14px">
+            <div class="perk"><div class="perk-l"><div class="perk-ic" style="background:var(--blue-bg)">🏠</div><div><div class="perk-name">Hostel Pref.</div><div class="perk-sub">Rank your choices</div></div></div><div class="perk-arrow" onclick="showPage('hostel')">→</div></div>
+            <div class="perk"><div class="perk-l"><div class="perk-ic" style="background:var(--green-bg)">👥</div><div><div class="perk-name">Roommate Finder</div><div class="perk-sub" style="color:var(--green);font-weight:700">🟢 Active Now</div></div></div><div class="perk-arrow" onclick="showPage('roommate')">→</div></div>
+            <div class="perk"><div class="perk-l"><div class="perk-ic" style="background:var(--teal-bg)">🤝</div><div><div class="perk-name">Confirm Roommate</div><div class="perk-sub">OTP-based pairing</div></div></div><div class="perk-arrow" onclick="showPage('confirmroommate')">→</div></div>
+            <div class="perk"><div class="perk-l"><div class="perk-ic" style="background:var(--orange-bg)">📋</div><div><div class="perk-name">Warden Request</div><div class="perk-sub">Submit for room no.</div></div></div><div class="perk-arrow" onclick="showPage('wardenrequest')">→</div></div>
+            <div class="perk" style="border-bottom:none"><div class="perk-l"><div class="perk-ic" style="background:var(--purple-bg)">🛡️</div><div><div class="perk-name">Warden Directory</div><div class="perk-sub">Contact your warden</div></div></div><div class="perk-arrow" onclick="showPage('wardens')">→</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOSTEL PREFERENCE PAGE -->
+  <div class="page" id="page-hostel">
+    <div class="ph"><h1>🏠 Hostel Preference</h1><p id="hp-page-sub">Expand a hostel, tick room types — each becomes a numbered preference. Min 8, max 15. <span id="hp-gender-note" style="font-weight:700;color:var(--navy2)">Showing: Boys Hostels</span></p></div>
+    <div class="hp-info-bar">ℹ️ <span><b>How it works:</b> Click any hostel → tick room types. Each tick adds a numbered slot on the right. Drag to reorder. Min 8 required.</span></div>
+    <div class="hp-layout">
+      <div id="hostel-grid"></div>
+      <div class="pref-panel" id="pref-panel">
+        <div class="pp-head"><h3>My Preferences</h3><span class="pp-counter" id="pp-counter">0 / 15</span></div>
+        <div id="pp-body">
+          <div class="pp-empty" id="pp-empty"><div class="pp-empty-ic">📋</div><div>No preferences yet.</div><div style="margin-top:4px;font-size:11px">Expand a hostel and tick a room type.</div></div>
+          <div class="pref-list" id="pref-list" style="display:none"></div>
+        </div>
+        <div class="pp-footer">
+          <div class="pp-status warn" id="pp-status">Select at least 8 preferences</div>
+          <button class="btn-save-pref" id="pp-save-btn" onclick="saveHostelPrefs()" disabled>Save Preferences →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROOMMATE FINDER -->
+  <!-- OPEN GROUPS PAGE -->
+<div class="page" id="page-opengroups">
+  <div class="ph"><h1>🟢 Open Groups</h1><p>Warden-approved groups with vacant seats. Join directly!</p></div>
+  <div style="background:var(--green-bg);border:1px solid rgba(22,163,74,0.2);border-radius:10px;padding:11px 16px;margin-bottom:20px;font-size:12.5px;color:var(--text2);display:flex;align-items:center;gap:8px">
+    <span style="font-size:13px">✅
+
+    <span>These groups already have <b>Warden approval</b>. Join a group → you'll be added to their room automatically!</span>
+  </div>
+  <div id="open-groups-container" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px"></div>
+</div>
+  <div class="page" id="page-roommate">
+    <div class="ph"><h1>👥 Roommate Finder</h1><p>Browse student profiles, check compatibility, and send roommate requests. Chat with potential roommates!</p></div>
+    <div style="background:var(--gold-bg);border:1px solid rgba(217,119,6,0.25);border-radius:10px;padding:11px 16px;margin-bottom:20px;display:flex;align-items:center;gap:10px">
+      <span style="font-size:20px">⏳</span>
+      <div style="flex:1"><div style="font-size:13px;font-weight:800;color:var(--orange-text)">Allocation Pending</div><div style="font-size:11.5px;color:var(--orange-text);opacity:0.9">Your room will be assigned after preferences are processed. Browse profiles and chat with potential roommates now!</div></div>
+      <button onclick="showPage('confirmroommate')" style="padding:8px 16px;background:var(--navy2);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap">Confirm Roommate →</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 295px;gap:16px;align-items:start">
+      <div>
+        <div class="rm-filter-bar">
+          <input type="text" placeholder="🔍  Search by name or reg. no." oninput="filterRoommates(this.value)"/>
+          <select onchange="filterRoommates()" id="rm-branch-filter" style="min-width:130px"><option value="">All Branches</option><option>B.Tech CSE</option><option>B.Tech ECE</option><option>B.Tech ME</option><option>BCA</option></select>
+          <select onchange="filterRoommates()" id="rm-year-filter" style="min-width:100px"><option value="">All Years</option><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option></select>
+          <select onchange="filterRoommates()" id="rm-sleep-filter" style="min-width:110px"><option value="">Sleep Habit</option><option value="Night Owl">Night Owl</option><option value="Early Riser">Early Riser</option></select>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px" id="rm-profiles"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="rm-my-panel">
+          <div class="rm-my-panel-head"><h3>👤 My Profile</h3><button onclick="showPage('profile')" style="font-size:10px;font-weight:700;padding:3px 9px;background:var(--navy2);color:#fff;border:none;border-radius:5px;cursor:pointer">Edit →</button></div>
+          <div style="padding:10px 14px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border)">
+              <div class="sb-av" style="width:38px;height:38px;font-size:13px;border-radius:9px" id="rm-pf-avatar-big">RK</div>
+              <div><div style="font-size:13px;font-weight:800;color:var(--text)" id="rm-pf-name">—</div><div style="font-size:10.5px;color:var(--muted)" id="rm-pf-meta">—</div></div>
+            </div>
+            <div class="rm-pf-row"><span class="rm-pf-lbl">🌙 Sleep</span><span class="rm-pf-val empty" id="rm-pf-sleep">—</span></div>
+            <div class="rm-pf-row"><span class="rm-pf-lbl">📚 Study</span><span class="rm-pf-val empty" id="rm-pf-study">—</span></div>
+            <div class="rm-pf-row"><span class="rm-pf-lbl">🔊 Noise</span><span class="rm-pf-val empty" id="rm-pf-noise">—</span></div>
+            <div class="rm-pf-row"><span class="rm-pf-lbl">📍 City</span><span class="rm-pf-val empty" id="rm-pf-city">—</span></div>
+            <div class="rm-pf-row" style="border-bottom:none"><span class="rm-pf-lbl">🏷️ Habits</span><span class="rm-pf-val empty" id="rm-pf-habits">—</span></div>
+          </div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+          <div style="padding:11px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+            <span style="font-size:12.5px;font-weight:800;color:var(--text)">My Requests</span>
+            <span id="req-count-badge" style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:100px;background:var(--progress-bg);color:var(--muted)">0 Sent</span>
+          </div>
+          <div style="padding:8px 14px;min-height:50px" id="req-list"><div style="font-size:11.5px;color:var(--muted);text-align:center;padding:14px 0">No requests sent yet.</div></div>
+        </div>
+        <div style="background:var(--blue-bg);border:1px solid rgba(37,99,235,0.2);border-radius:10px;padding:12px 14px">
+          <div style="font-size:12px;font-weight:800;color:var(--navy2);margin-bottom:5px">💬 Chat Feature</div>
+          <div style="font-size:11.5px;color:var(--text2);margin-bottom:10px;line-height:1.5">Use the <b>Chat</b> button on any profile to message potential roommates before sending a request!</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)">💡 The floating 💬 button also opens your active chats</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <!-- CONFIRM ROOMMATE -->
+  <div class="page" id="page-confirmroommate">
+    <div class="ph"><h1>🤝 Confirm Your Roommate</h1><p>Enter your roommate's registration number → Send OTP to their VIT email → They share the OTP → Your room group is formed.</p></div>
+    <div class="step-progress">
+      <div class="sp-item active" id="sp-1"><div class="sp-num active" id="spn-1">1</div><div><div class="sp-title">Enter Reg. No.</div><div class="sp-sub">Find &amp; check eligibility</div></div></div>
+      <div class="sp-item" id="sp-2"><div class="sp-num inactive" id="spn-2">2</div><div><div class="sp-title">Verify OTP</div><div class="sp-sub">Confirm their identity</div></div></div>
+      <div class="sp-item" id="sp-3"><div class="sp-num inactive" id="spn-3">3</div><div><div class="sp-title">Group Formed</div><div class="sp-sub">Ready to submit to warden</div></div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 310px;gap:16px;align-items:start">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="background:var(--card);border:1.5px solid var(--navy2);border-radius:12px;overflow:hidden" id="crm-block-reg">
+          <div style="padding:13px 18px;border-bottom:1px solid var(--border);background:var(--blue-bg);display:flex;align-items:center;gap:10px">
+            <div style="width:30px;height:30px;border-radius:8px;background:var(--navy2);display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;font-weight:800">1</div>
+            <div><div style="font-size:13.5px;font-weight:800;color:var(--navy2)">Enter Roommate's Registration Number</div><div style="font-size:11.5px;color:var(--blue-text);opacity:0.8">We'll check eligibility and send an OTP to their VIT email</div></div>
+          </div>
+          <div style="padding:20px">
+            <div style="background:var(--blue-bg);border:1px solid rgba(37,99,235,0.15);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--text2);margin-bottom:16px;line-height:1.6">ℹ️ Both students must be allocated to <b>the same room type and hostel block</b> to be eligible for pairing.</div>
+            <div class="fg"><label>Roommate's Registration Number</label><input type="text" id="crm-regno-input" placeholder="e.g. 24BCE1567" style="font-size:15px;padding:12px"/></div>
+            <button onclick="crmCheckEligibility()" style="padding:11px 24px;background:var(--navy2);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">Check Eligibility &amp; Send OTP →</button>
+            <div id="crm-reg-result" style="margin-top:14px;display:none"></div>
+          </div>
+        </div>
+        <div style="background:var(--card);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;display:none" id="crm-block-otp">
+          <div style="padding:13px 18px;border-bottom:1px solid var(--border);background:var(--orange-bg);display:flex;align-items:center;gap:10px">
+            <div style="width:30px;height:30px;border-radius:8px;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;font-weight:800">2</div>
+            <div><div style="font-size:13.5px;font-weight:800;color:var(--orange-text)">Enter OTP to Verify</div><div style="font-size:11.5px;color:var(--orange-text);opacity:0.8">OTP has been sent to your roommate's VIT email</div></div>
+          </div>
+          <div style="padding:20px">
+            <div id="crm-otp-target-info" style="margin-bottom:16px;padding:12px 15px;background:var(--bg);border:1px solid var(--border);border-radius:9px;font-size:13px;color:var(--text2)"></div>
+            <div class="fg"><label>Enter OTP (roommate shares this with you)</label><input type="text" id="crm-otp-input" class="otp-input" placeholder="— — — — — —" maxlength="6"/></div>
+            <div style="display:flex;gap:10px;align-items:center;margin-top:4px">
+              <button onclick="crmVerifyOTP()" style="padding:11px 24px;background:var(--orange);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">Verify OTP →</button>
+              <button onclick="crmResendOTP()" style="padding:11px 16px;background:none;border:1.5px solid var(--border);color:var(--text2);border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif">Resend OTP</button>
+            </div>
+            <div id="crm-otp-result" style="margin-top:12px;display:none"></div>
+          </div>
+        </div>
+        <div style="background:var(--card);border:1.5px solid var(--green);border-radius:12px;overflow:hidden;display:none" id="crm-block-group">
+          <div style="padding:13px 18px;border-bottom:1px solid rgba(22,163,74,0.2);background:var(--green-bg);display:flex;align-items:center;gap:10px">
+            <div style="width:30px;height:30px;border-radius:8px;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff">✓</div>
+            <div><div style="font-size:13.5px;font-weight:800;color:var(--green-text)">Room Group Formed Successfully!</div><div style="font-size:11.5px;color:var(--green-text);opacity:0.8">Your group is confirmed. Submit to the Warden for room assignment.</div></div>
+          </div>
+          <div style="padding:20px">
+            <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px">Group Members</div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px" id="crm-group-members"></div>
+            <div style="background:var(--gold-bg);border:1px solid rgba(217,119,6,0.2);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--text2);margin-bottom:18px;line-height:1.6">⏰ You have <b>72 hours</b> to submit this group to the Warden for room number assignment.</div>
+            <button onclick="showPage('wardenrequest')" style="width:100%;padding:12px;background:var(--green);color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">Submit Group to Warden →</button>
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--card);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;position:sticky;top:66px">
+        <div style="padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:13px;font-weight:800;color:var(--text)">My Room Group</span>
+          <span id="crm-group-counter" style="font-size:11px;font-weight:700;padding:2px 9px;border-radius:100px;background:var(--progress-bg);color:var(--muted)">1 / 2</span>
+        </div>
+        <div style="padding:12px">
+          <div style="background:var(--gold-bg);border:1px solid rgba(217,119,6,0.2);border-radius:8px;padding:9px 12px;margin-bottom:12px;font-size:11.5px;color:var(--text2)">🏠 <b>Room number</b> will be assigned by Warden after group submission.</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div class="grp-member" style="background:var(--blue-bg);border-color:rgba(37,99,235,0.2)">
+              <div class="sb-av" style="width:30px;height:30px;font-size:10px" id="crm-av-self">RK</div>
+              <div style="flex:1"><div style="font-size:12px;font-weight:700;color:var(--text)" id="crm-name-self">You</div><div style="font-size:10px;color:var(--navy2);font-weight:700">Room Owner</div></div>
+              <span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:100px;background:var(--green-bg);color:var(--green-text)">✓ YOU</span>
+            </div>
+            <div id="crm-slot-2" class="grp-member" style="border-style:dashed">
+              <div style="width:30px;height:30px;border-radius:7px;background:var(--bg);border:1.5px dashed var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--muted)">?</div>
+              <div><div style="font-size:11.5px;font-weight:700;color:var(--muted)">Slot 2 — Empty</div><div style="font-size:10px;color:var(--muted)">Waiting for roommate</div></div>
+            </div>
+          </div>
+          <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border)" id="crm-warden-wrap">
+            <button disabled id="crm-warden-btn" style="width:100%;padding:9px;background:var(--bg);color:var(--muted);border:1px solid var(--border);border-radius:8px;font-size:12.5px;font-weight:700;cursor:not-allowed;font-family:'Inter',sans-serif">Submit to Warden 🔒</button>
+            <div style="font-size:10.5px;color:var(--muted);text-align:center;margin-top:5px">Add a confirmed roommate first</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- OPEN GROUPS PAGE -->
+<div class="page" id="page-opengroups">
+  <div class="ph"><h1>🟢 Open Groups</h1><p>Warden-approved groups with vacant seats. Join directly!</p></div>
+  <div style="background:var(--green-bg);border:1px solid rgba(22,163,74,0.2);border-radius:10px;padding:11px 16px;margin-bottom:20px;font-size:12.5px;color:var(--text2);display:flex;align-items:center;gap:8px">
+   <span style="font-size:13px">✅</span>
+<span>These groups already have <b>Warden approval</b>. Join a group → you'll be added to their room automatically!</span>
+  </div>
+  <div id="open-groups-container" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px"></div>
+</div>
+<!-- WARDEN DIRECTORY PAGE -->
+<div class="page" id="page-wardens">
+  <div class="ph"><h1>🛡️ Warden / Faculty in Residence Directory</h1><p>All Faculty in Residence (FR) for VIT Bhopal hostels.</p></div>
+  <div style="background:var(--blue-bg);border:1px solid rgba(37,99,235,0.18);border-radius:10px;padding:12px 16px;margin-bottom:20px;font-size:12.5px;color:var(--text2)">ℹ️ <b>Faculty in Residence (FR)</b> are responsible for your hostel block.</div>
+  <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap">
+    <input type="text" placeholder="🔍 Search warden..." oninput="filterWardens(this.value)" style="flex:1;padding:9px 14px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:13px;outline:none"/>
+    <select onchange="filterWardensByBlock(this.value)" style="padding:9px 14px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:13px;outline:none">
+      <option value="">All Blocks</option>
+      <option value="Boys' Hostel Block 1">Boys' Block 1</option>
+      <option value="Boys' Hostel Block 2">Boys' Block 2</option>
+      <option value="Boys' Hostel Block 3">Boys' Block 3</option>
+      <option value="Boys' Hostel Block 4">Boys' Block 4</option>
+      <option value="Boys' Hostel Block 5">Boys' Block 5</option>
+      <option value="Boys' Hostel Block 6">Boys' Block 6</option>
+      <option value="Boys' Hostel Block 7">Boys' Block 7</option>
+      <option value="Boys' Hostel Block 8">Boys' Block 8</option>
+      <option value="Girls' Hostel Block 1">Girls' Block 1</option>
+      <option value="Girls' Hostel Block 2">Girls' Block 2</option>
+      <option value="Spl Block">Special Block</option>
+    </select>
+  </div>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+    <div style="padding:14px;overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:12px">
+        <thead><tr style="background:var(--bg)">
+          <th style="padding:8px 12px;text-align:left;font-size:9.5px;font-weight:700;color:var(--muted);text-transform:uppercase">Sr.</th>
+          <th style="padding:8px 12px;text-align:left;font-size:9.5px;font-weight:700;color:var(--muted);text-transform:uppercase">Name</th>
+          <th style="padding:8px 12px;text-align:left;font-size:9.5px;font-weight:700;color:var(--muted);text-transform:uppercase">Dept</th>
+          <th style="padding:8px 12px;text-align:left;font-size:9.5px;font-weight:700;color:var(--muted);text-transform:uppercase">Email</th>
+          <th style="padding:8px 12px;text-align:left;font-size:9.5px;font-weight:700;color:var(--muted);text-transform:uppercase">Phone</th>
+          <th style="padding:8px 12px;text-align:left;font-size:9.5px;font-weight:700;color:var(--muted);text-transform:uppercase">Block</th>
+        </tr></thead>
+        <tbody id="warden-mini-table"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+  <!-- WARDEN REQUEST -->
+  <div class="page" id="page-wardenrequest">
+    <div class="ph"><h1>📋 Warden Request</h1><p>Submit your confirmed room group to the Warden. The Warden reviews and assigns a permanent room number.</p></div>
+    <div id="wr-status-bar" style="background:var(--orange-bg);border:1px solid rgba(234,88,12,0.2);border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px">
+      <div style="width:44px;height:44px;border-radius:11px;background:rgba(234,88,12,0.15);border:2px solid rgba(234,88,12,0.3);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0" id="wr-status-icon">⏳</div>
+      <div style="flex:1">
+        <div style="font-size:14px;font-weight:800;color:var(--orange-text)" id="wr-status-title">Awaiting Submission</div>
+        <div style="font-size:12px;color:var(--orange-text);opacity:0.8;margin-top:2px" id="wr-status-sub">Confirm your roommate first, then submit the group here for warden approval.</div>
+      </div>
+      <div id="wr-room-badge" style="display:none;text-align:center;padding:10px 20px;background:var(--green);border-radius:10px">
+        <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.8);text-transform:uppercase;letter-spacing:0.08em">Assigned Room</div>
+        <div style="font-size:24px;font-weight:800;color:#fff;line-height:1.1" id="wr-room-number">—</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 320px;gap:16px;align-items:start">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+          <div style="padding:13px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+            <div style="display:flex;align-items:center;gap:8px"><span style="font-size:16px">👥</span><span style="font-size:13.5px;font-weight:800;color:var(--text)">Room Group Summary</span></div>
+            <span id="wr-group-badge" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;background:var(--progress-bg);color:var(--muted)">Incomplete</span>
+          </div>
+          <div style="padding:18px">
+            <div style="background:var(--gold-bg);border:1px solid rgba(217,119,6,0.2);border-radius:9px;padding:11px 14px;margin-bottom:16px;font-size:12.5px;color:var(--text2);display:flex;align-items:center;gap:8px"><span style="font-size:18px">🏠</span><div>Room number will be <b>assigned by the Warden</b> after your group is approved.</div></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px">
+              <div style="padding:11px 13px;background:var(--bg);border-radius:9px;border:1px solid var(--border)"><div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px">Preferred Hostel</div><div style="font-size:13px;font-weight:700;color:var(--text)" id="wr-hostel-val">—</div></div>
+              <div style="padding:11px 13px;background:var(--bg);border-radius:9px;border:1px solid var(--border)"><div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px">Group Size</div><div style="font-size:13px;font-weight:700;color:var(--text)" id="wr-size-val">1 / 2</div></div>
+            </div>
+            <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px">Group Members</div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
+              <div style="display:flex;align-items:center;gap:10px;padding:12px 15px;background:var(--blue-bg);border:1px solid rgba(37,99,235,0.18);border-radius:10px">
+                <div class="sb-av" style="width:36px;height:36px;font-size:12px" id="wr-av-self">RK</div>
+                <div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text)" id="wr-name-self">—</div><div style="font-size:11px;color:var(--muted)" id="wr-meta-self">—</div></div>
+                <span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;background:var(--green-bg);color:var(--green-text)">Room Owner</span>
+              </div>
+              <div id="wr-slot-2" style="display:flex;align-items:center;gap:10px;padding:12px 15px;background:var(--bg);border:1.5px dashed var(--border);border-radius:10px">
+                <div style="width:36px;height:36px;border-radius:9px;background:var(--bg);border:1.5px dashed var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--muted)">?</div>
+                <div><div style="font-size:12.5px;font-weight:700;color:var(--muted)">Slot 2 — Not Confirmed</div><div style="font-size:11px;color:var(--muted)">Go to "Confirm Roommate" page first</div></div>
+              </div>
+            </div>
+            <div id="wr-assigned-warden-info" style="background:var(--blue-bg);border:1px solid rgba(37,99,235,0.2);border-radius:10px;padding:13px 16px;margin-bottom:18px">
+              <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px">Your Assigned Warden</div>
+              <div id="wr-warden-details-box"></div>
+            </div>
+            <button id="wr-submit-btn" onclick="wrSubmitToWarden()" disabled style="width:100%;padding:14px;background:var(--bg);color:var(--muted);border:1px solid var(--border);border-radius:10px;font-size:14px;font-weight:700;cursor:not-allowed;font-family:'Inter',sans-serif;transition:all 0.3s">🔒 Complete Group to Submit</button>
+            <div id="wr-submit-note" style="font-size:11.5px;color:var(--muted);text-align:center;margin-top:8px">Add a confirmed roommate before submitting</div>
+          </div>
+        </div>
+        <div id="wr-approved-card" style="display:none;background:var(--card);border:1.5px solid var(--green);border-radius:12px;overflow:hidden">
+          <div style="padding:13px 18px;border-bottom:1px solid rgba(22,163,74,0.2);background:var(--green-bg);display:flex;align-items:center;gap:10px">
+            <span style="font-size:20px">✅</span><span style="font-size:13.5px;font-weight:800;color:var(--green-text)">Warden Approved Your Request!</span>
+          </div>
+          <div style="padding:22px">
+            <div style="text-align:center;padding:28px;background:linear-gradient(135deg,#1E3A8A,#7C3AED);border-radius:14px;margin-bottom:18px">
+              <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px">🎉 Your Assigned Room Number</div>
+              <div style="font-size:56px;font-weight:800;color:#fff;letter-spacing:0.04em;line-height:1" id="wr-final-room">—</div>
+              <div style="font-size:13px;color:rgba(255,255,255,0.65);margin-top:10px" id="wr-final-room-sub">Assigned by Warden</div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+              <div style="padding:11px 14px;background:var(--bg);border-radius:9px;border:1px solid var(--border)"><div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px">Warden Name</div><div style="font-size:13px;font-weight:700;color:var(--text)" id="wr-final-warden-name">—</div></div>
+              <div style="padding:11px 14px;background:var(--bg);border-radius:9px;border:1px solid var(--border)"><div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px">Approved On</div><div style="font-size:13px;font-weight:700;color:var(--text)" id="wr-approved-date">—</div></div>
+            </div>
+            <div style="background:var(--gold-bg);border:1px solid rgba(217,119,6,0.2);border-radius:9px;padding:12px 16px;font-size:12.5px;color:var(--text2);line-height:1.7">📌 <b>Next Step:</b> Please collect your room key from the Warden's Office with your VIT ID card within <b>3 days</b>.</div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+          <div style="padding:12px 14px;border-bottom:1px solid var(--border)"><span style="font-size:13px;font-weight:800;color:var(--text)">How Warden Approval Works</span></div>
+          <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;gap:11px;align-items:flex-start"><div style="width:26px;height:26px;border-radius:7px;background:var(--blue-bg);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--navy2);flex-shrink:0">1</div><div style="font-size:12.5px;color:var(--text2);line-height:1.5"><b style="color:var(--text)">Confirm roommate</b> via OTP on the previous page</div></div>
+            <div style="display:flex;gap:11px;align-items:flex-start"><div style="width:26px;height:26px;border-radius:7px;background:var(--blue-bg);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--navy2);flex-shrink:0">2</div><div style="font-size:12.5px;color:var(--text2);line-height:1.5"><b style="color:var(--text)">Submit the group</b> using the button on this page</div></div>
+            <div style="display:flex;gap:11px;align-items:flex-start"><div style="width:26px;height:26px;border-radius:7px;background:var(--blue-bg);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--navy2);flex-shrink:0">3</div><div style="font-size:12.5px;color:var(--text2);line-height:1.5"><b style="color:var(--text)">Warden reviews</b> your request within 24–48 hours</div></div>
+            <div style="display:flex;gap:11px;align-items:flex-start"><div style="width:26px;height:26px;border-radius:7px;background:var(--green-bg);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--green-text);flex-shrink:0">4</div><div style="font-size:12.5px;color:var(--text2);line-height:1.5"><b style="color:var(--text)">Room number assigned!</b> Collect key within 3 days</div></div>
+          </div>
+        </div>
+        <div style="background:var(--gold-bg);border:1px solid rgba(217,119,6,0.2);border-radius:10px;padding:12px 15px;font-size:12px;color:var(--text2);line-height:1.7">⚠️ If no group is submitted within <b>72 hours</b> of room allocation, the Warden will assign roommates automatically.</div>
+        <button onclick="showPage('wardens')" style="width:100%;padding:10px;background:var(--navy2);color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">🛡️ View All Warden Details →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MY PROFILE -->
+  <div class="page" id="page-profile">
+    <div class="ph"><h1>👤 My Profile</h1><p>View and edit your VIT Bhopal hostel profile. A complete profile helps find better roommates!</p></div>
+    <div class="profile-complete-bar">
+      <div style="font-size:12px;font-weight:700;color:var(--navy2);white-space:nowrap">Profile Complete</div>
+      <div class="pcb-bar"><div class="pcb-fill" id="pcb-fill" style="width:30%"></div></div>
+      <div style="font-size:12px;font-weight:800;color:var(--navy2)" id="pcb-pct">30%</div>
+    </div>
+    <div class="profile-view">
+      <div class="profile-header">
+        <div class="pf-photo-wrap" onclick="triggerPhotoUpload()">
+          <div class="pf-av" id="pf-av-big">RK</div>
+          <div class="pf-photo-overlay">📷</div>
+          <input type="file" id="pf-photo-input" accept="image/*" style="display:none" onchange="handlePhotoUpload(this)"/>
+        </div>
+        <div style="flex:1">
+          <div class="pf-name" id="pf-name-disp">—</div>
+          <div class="pf-sub" id="pf-sub-disp">—</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px">📷 Click avatar to upload photo</div>
+        </div>
+        <button class="btn-edit-profile" id="pf-edit-btn" onclick="toggleProfileEdit(true)">✏️ Edit Profile</button>
+        <button class="btn-cancel-profile" id="pf-cancel-btn" onclick="toggleProfileEdit(false)" style="display:none;margin-left:8px">Cancel</button>
+      </div>
+      <div class="profile-tabs">
+        <button class="ptab on" onclick="showProfileTab(this,'basic')">📋 Basic Info</button>
+        <button class="ptab" onclick="showProfileTab(this,'habits')">🌙 Habits &amp; Lifestyle</button>
+        <button class="ptab" onclick="showProfileTab(this,'location')">📍 Location</button>
+      </div>
+      <div id="pf-view-mode">
+        <div class="profile-body" id="pftab-view-basic">
+          <div class="pf-section">
+            <div class="pf-sec-title">Academic Information</div>
+            <div class="pf-grid">
+              <div class="pf-field"><div class="pf-field-lbl">Email</div><div class="pf-field-val" id="pfv-email">—</div></div>
+              <div class="pf-field"><div class="pf-field-lbl">Reg. Number</div><div class="pf-field-val" id="pfv-regno">—</div></div>
+              <div class="pf-field"><div class="pf-field-lbl">Branch</div><div class="pf-field-val" id="pfv-branch">—</div></div>
+              <div class="pf-field"><div class="pf-field-lbl">Year</div><div class="pf-field-val" id="pfv-year">—</div></div>
+              <div class="pf-field"><div class="pf-field-lbl">Gender</div><div class="pf-field-val" id="pfv-gender">—</div></div>
+              <div class="pf-field"><div class="pf-field-lbl">Phone</div><div class="pf-field-val" id="pfv-phone"><span class="empty">Not added</span></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="profile-body" id="pftab-view-habits" style="display:none">
+          <div class="pf-section">
+            <div class="pf-sec-title">Lifestyle Preferences</div>
+            <div class="pf-grid">
+              <div class="pf-field"><div class="pf-field-lbl">Sleep Time</div><div class="pf-field-val" id="pfv-sleep"><span class="empty">Not set</span></div></div>
+              <div class="pf-field"><div class="pf-field-lbl">Study Time</div><div class="pf-field-val" id="pfv-study"><span class="empty">Not set</span></div></div>
+              <div class="pf-field"><div class="pf-field-lbl">College Timing</div><div class="pf-field-val" id="pfv-college"><span class="empty">Not set</span></div></div>
+              <div class="pf-field"><div class="pf-field-lbl">Noise Tolerance</div><div class="pf-field-val" id="pfv-noise"><span class="empty">Not set</span></div></div>
+              <div class="pf-field"><div class="pf-field-lbl">Religious</div><div class="pf-field-val" id="pfv-religious"><span class="empty">Not set</span></div></div>
+            </div>
+          </div>
+          <div class="pf-section">
+            <div class="pf-sec-title">Personal Habits</div>
+            <div id="pfv-habits-display" style="display:flex;flex-wrap:wrap;gap:6px;min-height:30px"><span style="font-size:12px;color:var(--muted);font-style:italic">No habits added</span></div>
+          </div>
+        </div>
+        <div class="profile-body" id="pftab-view-location" style="display:none">
+          <div class="pf-section">
+            <div class="pf-sec-title">Home Location</div>
+            <div class="pf-grid">
+              <div class="pf-field"><div class="pf-field-lbl">State</div><div class="pf-field-val" id="pfv-state"><span class="empty">Not added</span></div></div>
+              <div class="pf-field"><div class="pf-field-lbl">City</div><div class="pf-field-val" id="pfv-city"><span class="empty">Not added</span></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="pf-edit-mode" style="display:none">
+        <div class="profile-body" id="pftab-edit-basic">
+          <div class="pf-section">
+            <div class="pf-sec-title">Academic Information</div>
+            <div class="pf-grid">
+              <div class="fg"><label>Full Name</label><input type="text" id="pe-name" placeholder="As per ID card"/></div>
+              <div class="fg"><label>Phone Number</label><input type="text" id="pe-phone" placeholder="+91 98XXXXXXXX"/></div>
+              <div class="fg"><label>Branch</label><select id="pe-branch"><option value="">Select...</option><option>B.Tech CSE</option><option>B.Tech ECE</option><option>B.Tech ME</option><option>B.Tech Civil</option><option>BCA</option><option>MBA</option><option>MCA</option><option>Other</option></select></div>
+              <div class="fg"><label>Year</label><select id="pe-year"><option value="">Select...</option><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option><option>PG</option></select></div>
+            </div>
+          </div>
+        </div>
+        <div class="profile-body" id="pftab-edit-habits" style="display:none">
+          <div class="pf-section">
+            <div class="pf-sec-title">Lifestyle Preferences</div>
+            <div class="fgr">
+              <div class="fg"><label>Sleep Time</label><select id="pe-sleep"><option value="">Select...</option><option value="Before 10 PM">Before 10 PM</option><option value="10–11 PM">10–11 PM</option><option value="11 PM–12 AM">11 PM–12 AM</option><option value="12 AM–1 AM">12 AM–1 AM</option><option value="After 1 AM">After 1 AM</option></select></div>
+              <div class="fg"><label>Study Time</label><select id="pe-study"><option value="">Select...</option><option value="Morning (5–9 AM)">Morning (5–9 AM)</option><option value="Afternoon (12–5 PM)">Afternoon (12–5 PM)</option><option value="Evening (5–9 PM)">Evening (5–9 PM)</option><option value="Night (9 PM–12 AM)">Night (9 PM–12 AM)</option><option value="Late Night (12 AM+)">Late Night (12 AM+)</option></select></div>
+            </div>
+            <div class="fgr">
+              <div class="fg"><label>College Timing</label><select id="pe-college"><option value="">Select...</option><option value="Morning Batch">Morning Batch</option><option value="Evening Batch">Evening Batch</option><option value="Mixed / Variable">Mixed / Variable</option></select></div>
+              <div class="fg"><label>Noise Tolerance</label><select id="pe-noise"><option value="">Select...</option><option value="Needs Silence">🤫 Needs complete silence</option><option value="Moderate Noise OK">🔉 Moderate noise is OK</option><option value="Not Sensitive to Noise">🔊 Not sensitive to noise</option></select></div>
+            </div>
+            <div class="fgr">
+              <div class="fg"><label>Religious / Beliefs</label><select id="pe-religious"><option value="">Prefer not to say</option><option value="Hindu">Hindu</option><option value="Muslim">Muslim</option><option value="Christian">Christian</option><option value="Sikh">Sikh</option><option value="Buddhist">Buddhist</option><option value="Other">Other</option></select></div>
+            </div>
+          </div>
+          <div class="pf-section">
+            <div class="pf-sec-title">Personal Habits</div>
+            <div class="habit-toggle" id="habit-toggle">
+              <button class="habit-chip" onclick="toggleHabit(this)" data-val="Night Owl">🌙 Night Owl</button>
+              <button class="habit-chip" onclick="toggleHabit(this)" data-val="Early Riser">🌅 Early Riser</button>
+              <button class="habit-chip" onclick="toggleHabit(this)" data-val="Studious">📚 Studious</button>
+              <button class="habit-chip" onclick="toggleHabit(this)" data-val="Gamer">🎮 Gamer</button>
+              <button class="habit-chip" onclick="toggleHabit(this)" data-val="Sports">⚽ Sports</button>
+              <button class="habit-chip" onclick="toggleHabit(this)" data-val="Music">🎵 Music</button>
+              <button class="habit-chip" onclick="toggleHabit(this)" data-val="Tidy">✨ Tidy Room</button>
+              <button class="habit-chip" onclick="toggleHabit(this)" data-val="Quiet">🤫 Quiet Pref.</button>
+              <button class="habit-chip" onclick="toggleHabit(this)" data-val="Social">🎉 Social</button>
+              <button class="habit-chip" onclick="toggleHabit(this)" data-val="Veg">🥗 Vegetarian</button>
+              <button class="habit-chip" onclick="toggleHabit(this)" data-val="AC Pref">❄️ AC Pref.</button>
+            </div>
+          </div>
+        </div>
+        <div class="profile-body" id="pftab-edit-location" style="display:none">
+          <div class="pf-section">
+            <div class="pf-sec-title">Home Location</div>
+            <div class="fgr">
+              <div class="fg"><label>State</label><select id="pe-state"><option value="">Select...</option><option value="Uttar Pradesh">Uttar Pradesh</option><option value="Madhya Pradesh">Madhya Pradesh</option><option value="Maharashtra">Maharashtra</option><option value="Delhi">Delhi</option><option value="Rajasthan">Rajasthan</option><option value="Bihar">Bihar</option><option value="Gujarat">Gujarat</option><option value="Punjab">Punjab</option><option value="Other">Other</option></select></div>
+              <div class="fg"><label>City</label><input type="text" id="pe-city" placeholder="Your city"/></div>
+            </div>
+          </div>
+        </div>
+        <div style="padding:0 22px 20px;display:flex;gap:10px">
+          <button class="btn-edit-profile" style="padding:10px 24px;font-size:13px" onclick="saveProfile()">💾 Save Changes</button>
+          <button class="btn-cancel-profile" onclick="toggleProfileEdit(false)">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROOM HISTORY -->
+  <div class="page" id="page-roomhistory">
+    <div class="ph"><h1>📊 Room History</h1><p>Your hostel allocation history across semesters.</p></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px">
+      <div class="sc"><div class="sc-lbl">Current Room <span>🏠</span></div><div class="sc-val" id="rh-curr-room" style="font-size:14px">Pending</div><div class="sc-sub" id="rh-curr-sub">Not yet assigned</div></div>
+      <div class="sc"><div class="sc-lbl">Semesters Stayed <span>📅</span></div><div class="sc-val">3</div><div class="sc-sub">Since Sem 1, 2023</div></div>
+      <div class="sc"><div class="sc-lbl">Mess Block <span>🍽️</span></div><div class="sc-val" style="font-size:15px">Block 1</div><div class="sc-sub">Boys Hostel Mess</div></div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+      <div style="padding:13px 18px;border-bottom:1px solid var(--border)"><span style="font-size:13.5px;font-weight:800;color:var(--text)">Allocation History</span></div>
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12.5px">
+        <thead><tr style="background:var(--bg)">
+          <th style="padding:10px 18px;text-align:left;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase">Semester</th>
+          <th style="padding:10px 18px;text-align:left;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase">Hostel</th>
+          <th style="padding:10px 18px;text-align:left;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase">Room</th>
+          <th style="padding:10px 18px;text-align:left;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase">Room Type</th>
+          <th style="padding:10px 18px;text-align:left;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase">Status</th>
+        </tr></thead>
+        <tbody>
+          <tr style="border-top:1px solid var(--border)"><td style="padding:11px 18px;font-weight:700;color:var(--text)">Sem 5 (Current)</td><td style="padding:11px 18px;color:var(--text2)">—</td><td style="padding:11px 18px;color:var(--muted);font-style:italic" id="rh-sem5-room">Pending Warden</td><td style="padding:11px 18px;color:var(--text2)">—</td><td style="padding:11px 18px"><span class="status-pill" id="rh-sem5-status" style="background:var(--orange-bg);color:var(--orange-text)">Pending</span></td></tr>
+          <tr style="border-top:1px solid var(--border)"><td style="padding:11px 18px;font-weight:700;color:var(--text)"><tr style="border-top:1px solid var(--border)"><td style="padding:11px 18px;font-weight:700;color:var(--text)">Sem 4</td><td style="padding:11px 18px;color:var(--text2)" id="rh-sem4-hostel">Boys Hostel 3</td><td style="padding:11px 18px;color:var(--text2)">H3-210</td><td style="padding:11px 18px;color:var(--text2)">2-Bedded AC</td><td style="padding:11px 18px"><span class="status-pill" style="background:var(--progress-bg);color:var(--muted)">Completed</span></td></tr>
+<tr style="border-top:1px solid var(--border)"><td style="padding:11px 18px;font-weight:700;color:var(--text)">Sem 3</td><td style="padding:11px 18px;color:var(--text2)" id="rh-sem3-hostel">Boys Hostel 5</td><td style="padding:11px 18px;color:var(--text2)">H5-112</td><td style="padding:11px 18px;color:var(--text2)">3-Bedded Non-AC</td><td style="padding:11px 18px"><span class="status-pill" style="background:var(--progress-bg);color:var(--muted)">Completed</span></td></tr>
+<tr style="border-top:1px solid var(--border)"><td style="padding:11px 18px;font-weight:700;color:var(--text)">Sem 1–2</td><td style="padding:11px 18px;color:var(--text2)" id="rh-sem1-hostel">Boys Hostel 1</td><td style="padding:11px 18px;color:var(--text2)">H1-318</td><td style="padding:11px 18px;color:var(--text2)">4 Bunk Non-AC</td><td style="padding:11px 18px"><span class="status-pill" style="background:var(--progress-bg);color:var(--muted)">Completed</span></td></tr>        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- FEE STRUCTURE -->
+  <div class="page" id="page-fees">
+    <div class="ph"><h1>💰 Hostel Fee Structure 2026–27</h1><p>Official fees per 10 months. Mess charges ₹81,400 included in total.</p></div>
+    <div class="fee-section">
+      <div class="fee-section-head" style="background:var(--blue-bg)"><span style="font-size:16px">🟦</span><div><div style="font-size:13px;font-weight:800;color:var(--navy2)">Block I – Boys Hostel Fees (10 Months)*</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Mess charges ₹81,400 included in total</div></div></div>
+      <div style="overflow-x:auto;padding:14px">
+        <table class="fee-table">
+          <thead>
+            <tr><th style="text-align:left;min-width:160px">Particulars</th><th colspan="2">Double Bedded</th><th colspan="2">Three Bedded</th><th colspan="2">Four Bedded</th><th colspan="2">Six Bedded</th><th>Eight Bedded</th></tr>
+            <tr><th style="text-align:left"></th><th>A/C</th><th>Non A/C</th><th>A/C</th><th>Non A/C</th><th>A/C<br><span style="font-size:8px">Bunker Bed</span></th><th>Non A/C<br><span style="font-size:8px">Flat Bed</span></th><th>A/C</th><th>Non A/C</th><th>Non A/C</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Hostel Fees</td><td>₹1,15,460</td><td>₹86,990</td><td>₹1,03,450</td><td>₹72,680</td><td>₹85,050</td><td>₹48,430</td><td>₹62,010</td><td>₹40,440</td><td>₹30,380</td></tr>
+            <tr><td>Mess Charges</td><td>₹81,400</td><td>₹81,400</td><td>₹81,400</td><td>₹81,400</td><td>₹81,400</td><td>₹81,400</td><td>₹81,400</td><td>₹81,400</td><td>₹81,400</td></tr>
+            <tr class="total-row"><td>Total</td><td>₹1,96,860</td><td>₹1,68,390</td><td>₹1,84,850</td><td>₹1,54,080</td><td>₹1,66,450</td><td>₹1,29,830</td><td>₹1,43,410</td><td>₹1,21,840</td><td>₹1,11,780</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="fee-section">
+      <div class="fee-section-head" style="background:var(--blue-bg)"><span style="font-size:16px">🟦</span><div><div style="font-size:13px;font-weight:800;color:var(--navy2)">Blocks 2–8 – Boys Hostel Fees (10 Months)*</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Mess charges ₹81,400 included in total</div></div></div>
+      <div style="overflow-x:auto;padding:14px">
+        <table class="fee-table">
+          <thead>
+            <tr><th style="text-align:left;min-width:160px">Particulars</th><th colspan="2">Double Bedded</th><th colspan="2">Three Bedded</th><th>4-Bed A/C Bunker</th><th>4-Bed Non-AC Bunker</th><th>4-Bed A/C Flat</th><th>4-Bed Non-AC Flat</th></tr>
+            <tr><th style="text-align:left"></th><th>A/C</th><th>Non A/C</th><th>A/C</th><th>Non A/C</th><th></th><th></th><th></th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Hostel Fees</td><td>₹1,27,760</td><td>₹98,100</td><td>₹1,10,080</td><td>₹80,300</td><td>₹94,560</td><td>₹55,700</td><td>₹97,900</td><td>₹60,630</td></tr>
+            <tr><td>Mess Charges</td><td>₹81,400</td><td>₹81,400</td><td>₹81,400</td><td>₹81,400</td><td>₹81,400</td><td>₹81,400</td><td>₹81,400</td><td>₹81,400</td></tr>
+            <tr class="total-row"><td>Total</td><td>₹2,09,160</td><td>₹1,79,500</td><td>₹1,91,480</td><td>₹1,61,700</td><td>₹1,75,960</td><td>₹1,37,100</td><td>₹1,79,300</td><td>₹1,42,030</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="fee-section">
+      <div class="fee-section-head" style="background:var(--purple-bg)"><span style="font-size:16px">🟣</span><div><div style="font-size:13px;font-weight:800;color:var(--purple)">Block I – Girls Hostel Fees (10 Months)*</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Mess charges ₹81,400 included in total</div></div></div>
+      <div style="overflow-x:auto;padding:14px">
+        <table class="fee-table">
+          <thead>
+            <tr><th style="text-align:left;min-width:160px">Particulars</th><th>1-Bed Non-AC</th><th colspan="2">Double Bedded</th><th colspan="2">Three Bedded</th><th colspan="2">Four Bedded</th><th>5-Bed Non-AC</th><th colspan="2">Six Bedded</th><th>8-Bed Non-AC</th></tr>
+            <tr><th style="text-align:left"></th><th></th><th>A/C</th><th>Non A/C</th><th>A/C</th><th>Non A/C</th><th>A/C Bunker</th><th>Non-AC Flat</th><th></th><th>A/C</th><th>Non A/C</th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Hostel Fees</td><td>₹1,04,270</td><td>₹1,15,460</td><td>₹86,990</td><td>₹1,03,450</td><td>₹72,680</td><td>₹85,050</td><td>₹48,430</td><td>₹50,860</td><td>₹62,010</td><td>₹40,440</td><td>₹30,380</td></tr>
+            <tr><td>Mess Charges</td><td>₹81,400</td><td>₹81,400</td><td>₹81,400</td><td>₹81,400</td><td>₹81,400</td><td>₹81,400</td><td>₹81,400</td><td>₹81,400</td><td>₹81,400</td><td>₹81,400</td><td>₹81,400</td></tr>
+            <tr class="total-row"><td>Total</td><td>₹1,85,670</td><td>₹1,96,860</td><td>₹1,68,390</td><td>₹1,84,850</td><td>₹1,54,080</td><td>₹1,66,450</td><td>₹1,29,830</td><td>₹1,32,260</td><td>₹1,43,410</td><td>₹1,21,840</td><td>₹1,11,780</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="fee-section">
+      <div class="fee-section-head" style="background:var(--purple-bg)"><span style="font-size:16px">🟣</span><div><div style="font-size:13px;font-weight:800;color:var(--purple)">Block II – Girls Hostel Fees (10 Months)*</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Mess charges ₹81,400 included in total</div></div></div>
+      <div style="overflow-x:auto;padding:14px">
+        <table class="fee-table">
+          <thead>
+            <tr><th style="text-align:left;min-width:160px">Particulars</th><th colspan="2">Double Bedded</th><th colspan="2">Three Bedded</th><th>4-Bed A/C Bunker</th><th>4-Bed Non-AC Bunker</th><th>4-Bed A/C Flat</th><th>4-Bed Non-AC Flat</th></tr>
+            <tr><th style="text-align:left"></th><th>A/C</th><th>Non A/C</th><th>A/C</th><th>Non A/C</th><th></th><th></th><th></th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Hostel Fees</td><td>₹1,27,760</td><td>₹98,100</td><td>₹1,10,080</td><td>₹80,300</td><td>₹94,560</td><td>₹55,700</td><td>₹97,900</td><td>₹60,630</td></tr>
+            <tr><td>Mess Charges</td><td>₹81,400</td><td>₹81,400</td><td>₹81,400</td><td>₹81,400</td><td>₹81,400</td><td>₹81,400</td><td>₹81,400</td><td>₹81,400</td></tr>
+            <tr class="total-row"><td>Total</td><td>₹2,09,160</td><td>₹1,79,500</td><td>₹1,91,480</td><td>₹1,61,700</td><td>₹1,75,960</td><td>₹1,37,100</td><td>₹1,79,300</td><td>₹1,42,030</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div style="background:var(--gold-bg);border:1px solid rgba(217,119,6,0.2);border-radius:10px;padding:12px 16px;font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:16px">* Fees are for 10 months (academic year). Mess charges of ₹81,400 are included. Fees subject to change — verify with official VIT Bhopal portal before making payment.</div>
+
+
+<!-- CHAT FAB -->
+<button class="chat-fab" id="chat-fab" onclick="toggleChatList()" style="display:none">💬<div class="chat-fab-badge" id="chat-fab-badge" style="display:none">1</div></button>
+
+<!-- CHAT LIST PANEL -->
+<div id="chat-list-panel" style="position:fixed;bottom:90px;right:24px;z-index:149;width:300px;background:var(--card);border:1px solid var(--border);border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,0.15);display:none">
+  <div style="padding:13px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between"><span style="font-size:13.5px;font-weight:800;color:var(--text)">💬 Chats</span><span style="font-size:11px;color:var(--muted)" id="chat-list-count">0 active</span></div>
+  <div id="chat-list-items" style="max-height:320px;overflow-y:auto"></div>
+  <div style="padding:10px 14px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);text-align:center">Go to Roommate Finder to start new chats</div>
+</div>
+
+<!-- CHAT WINDOW -->
+<div class="chat-overlay" id="chat-overlay" onclick="closeChatOnOverlay(event)">
+  <div class="chat-window" onclick="event.stopPropagation()">
+    <div class="chat-header">
+      <div class="chat-header-av" id="chat-av">AK</div>
+      <div><div class="chat-header-name" id="chat-name">Arjun Kumar</div><div class="chat-header-status" id="chat-status">🟢 Online</div></div>
+      <button class="chat-close" onclick="closeChat()">✕</button>
+    </div>
+    <div class="chat-messages" id="chat-messages"></div>
+    <div class="chat-input-row">
+      <input type="text" class="chat-input" id="chat-input" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendChatMsg()"/>
+      <button class="chat-send-btn" onclick="sendChatMsg()">➤</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span id="ti">✅</span>&nbsp;<span id="tm">Done!</span></div>
+
+<script>
+var USER={name:'',email:'',regno:'',gender:'M',year:'',branch:'',initials:'',phone:'',sleep:'',study:'',college:'',noise:'',religious:'',habits:[],state:'',city:'',photoUrl:''};
+var MAX_PREFS=15;
+var preferences=[];
+var prefsSaved=false;
+var profileEditMode=false;
+var currentProfileTab='basic';
+var selectedHabits=[];
+var sentRequests=[];
+var crmPendingOTP=null;
+var crmPendingReg=null;
+var crmPendingName=null;
+var crmGroupConfirmed=false;
+var wrSubmitted=false;
+var openGroups=[
+
+  {id:'grp-demo1',ownerId:'24BAI1567',ownerName:'Arjun Kumar',ownerInitials:'AK',hostelName:'Boys Hostel 3',roomType:'4-Bedded AC (Bunker)',bedCount:4,currentMembers:2,vacantSeats:2,members:[{name:'Arjun Kumar',regno:'24BAI1567',initials:'AK',color:'#7C3AED'},{name:'Rohan Sharma',regno:'24BCE1302',initials:'RS',color:'#2563EB'}],approvedOn:'12 Jun 2026'},
+  {id:'grp-demo2',ownerId:'24BAI1892',ownerName:'Saurabh Patel',ownerInitials:'SP',hostelName:'Boys Hostel 5',roomType:'6-Bedded Non-AC',bedCount:6,currentMembers:2,vacantSeats:4,members:[{name:'Saurabh Patel',regno:'24BAI1892',initials:'SP',color:'#0D9488'},{name:'Mihir Verma',regno:'24BCE2011',initials:'MV',color:'#059669'}],approvedOn:'11 Jun 2026'},
+  {id:'grp-demo3',ownerId:'24BCY1678',ownerName:'Vivek Gupta',ownerInitials:'VG',hostelName:'Boys Hostel 2',roomType:'4-Bedded Non-AC (Flat)',bedCount:4,currentMembers:3,vacantSeats:1,members:[{name:'Vivek Gupta',regno:'24BCY1678',initials:'VG',color:'#D97706'},{name:'Pranav Joshi',regno:'24BCA0234',initials:'PJ',color:'#DC2626'},{name:'Karan Singh',regno:'21BCE1999',initials:'KS',color:'#7C3AED'}],approvedOn:'10 Jun 2026'}
+,{id:'grp-demo4',ownerId:'24BSA1456',ownerName:'Priya Sharma',ownerInitials:'PS',hostelName:'Girls Hostel 1',roomType:'4-Bedded AC (Bunker)',bedCount:4,currentMembers:2,vacantSeats:2,members:[{name:'Priya Sharma',regno:'24BSA1456',initials:'PS',color:'#9333EA'},{name:'Sneha Verma',regno:'24BCE1789',initials:'SV',color:'#DB2777'}],approvedOn:'12 Jun 2026'}
+  ,{id:'grp-demo5',ownerId:'24BCE1923',ownerName:'Ananya Patel',ownerInitials:'AP',hostelName:'Girls Hostel 2',roomType:'3-Bedded Non-AC',bedCount:3,currentMembers:1,vacantSeats:2,members:[{name:'Ananya Patel',regno:'24BCE1923',initials:'AP',color:'#9333EA'}],approvedOn:'11 Jun 2026'}
+];
+var assignedRoomNumber='';
+var activeChats={};
+var activeChatReg=null;
+var chatListOpen=false;
+
+var WARDENS=[
+  {sr:10,name:'Dr. R. Senthilkumar',dept:'SCOPE',email:'fr.block1a@vitbhopal.ac.in',phone:'7024267806',block:"Boys' Hostel Block 1",initials:'RS',color:'#2563EB'},
+  {sr:11,name:'Dr. Komarasamy G',dept:'SCAI',email:'fr.block1a@vitbhopal.ac.in',phone:'7024267806',block:"Boys' Hostel Block 1",initials:'KG',color:'#7C3AED'},
+  {sr:12,name:'Dr. Moses Dian S',dept:'SCOPE',email:'fr.block1b@vitbhopal.ac.in',phone:'7024267802',block:"Boys' Hostel Block 1",initials:'MD',color:'#0D9488'},
+  {sr:13,name:'Dr. Priyakumarn M',dept:'SASL-English',email:'fr.block1b@vitbhopal.ac.in',phone:'7024267802',block:"Boys' Hostel Block 1",initials:'PM',color:'#D97706'},
+  {sr:14,name:'Dr. Sivabalan KR',dept:'SCOPE',email:'fr.block2@vitbhopal.ac.in',phone:'7024267800',block:"Boys' Hostel Block 2",initials:'SK',color:'#059669'},
+  {sr:15,name:'Dr. Vinesh Kumar',dept:'SCAI',email:'fr.block3@vitbhopal.ac.in',phone:'7024111636',block:"Boys' Hostel Block 3",initials:'VK',color:'#DC2626'},
+  {sr:16,name:'Dr. Abdur Rahman',dept:'SASL',email:'fr.block3@vitbhopal.ac.in',phone:'7024111636',block:"Boys' Hostel Block 3",initials:'AR',color:'#7C3AED'},
+  {sr:17,name:'Dr. Ajeet Singh',dept:'SCOPE',email:'fr.block4@vitbhopal.ac.in',phone:'7024267809',block:"Boys' Hostel Block 4",initials:'AS',color:'#2563EB'},
+  {sr:18,name:'Dr. Velmani R',dept:'SCAI',email:'fr.block5@vitbhopal.ac.in',phone:'7024267810',block:"Boys' Hostel Block 5",initials:'VR',color:'#0D9488'},
+  {sr:19,name:'Dr. R. Clement Johnson',dept:'SASL',email:'fr.block6@vitbhopal.ac.in',phone:'',block:"Boys' Hostel Block 6",initials:'CJ',color:'#D97706'},
+  {sr:20,name:'Dr. Benevatho Jaison A',dept:'SASL-Maths',email:'fr.block6@vitbhopal.ac.in',phone:'7024111638',block:"Boys' Hostel Block 6",initials:'BJ',color:'#059669'},
+  {sr:21,name:'Dr. Anurag Tiwari',dept:'SEEE',email:'fr.block6@vitbhopal.ac.in',phone:'',block:"Boys' Hostel Block 6",initials:'AT',color:'#DC2626'},
+  {sr:22,name:'Dr. Harish Chandra',dept:'SASL-Maths',email:'fr.block7@vitbhopal.ac.in',phone:'7024267811',block:"Boys' Hostel Block 7",initials:'HC',color:'#7C3AED'},
+  {sr:23,name:'Dr. Arindam Dutta',dept:'SEEE',email:'fr.block7@vitbhopal.ac.in',phone:'7024267811',block:"Boys' Hostel Block 7",initials:'AD',color:'#2563EB'},
+  {sr:24,name:'Dr. Abhinav Kumar',dept:'SASL-Physics',email:'fr.block8@vitbhopal.ac.in',phone:'7024111637',block:"Boys' Hostel Block 8",initials:'AK',color:'#0D9488'},
+  {sr:24,name:'Dr. Dondu Harish Babu',dept:'SASL-Maths',email:'fr.block8@vitbhopal.ac.in',phone:'7024111637',block:"Boys' Hostel Block 8",initials:'DH',color:'#D97706'},
+  {sr:25,name:'Dr. P. Ramesh Babu',dept:'SEEE',email:'fr.block8@vitbhopal.ac.in',phone:'7024111637',block:"Boys' Hostel Block 8",initials:'PR',color:'#059669'},
+  {sr:26,name:'Dr. Sreevani Maddukuri',dept:'SCSE',email:'fr.girlshostel1@vitbhopal.ac.in',phone:'7024244552',block:"Girls' Hostel Block 1",initials:'SM',color:'#9333EA'},
+  {sr:27,name:'Dr. Krishna Chauhan',dept:'SEEE',email:'fr.girlshostel1@vitbhopal.ac.in',phone:'7024244552',block:"Girls' Hostel Block 1",initials:'KC',color:'#DB2777'},
+  {sr:28,name:'Dr. Rupesh Kumari',dept:'SEEE',email:'fr.girlshostel2@vitbhopal.ac.in',phone:'7024240879',block:"Girls' Hostel Block 2",initials:'RK',color:'#9333EA'},
+  {sr:29,name:'Mrs. Vaishnavi S',dept:'SCOPE',email:'fr.girlshostel2@vitbhopal.ac.in',phone:'7024240879',block:"Girls' Hostel Block 2",initials:'VS',color:'#DB2777'},
+  {sr:30,name:'Dr. Sheerin Kayenat',dept:'SASL-Maths',email:'fr.special.block@vitbhopal.ac.in',phone:'7024244225',block:'Spl Block',initials:'SK',color:'#0D9488'}
+];
+
+function toggleTheme(){var d=document.documentElement,dk=d.getAttribute('data-theme')==='dark';d.setAttribute('data-theme',dk?'light':'dark');document.getElementById('themeBtn').textContent=dk?'🌙':'☀️';}
+function authTab(t){document.getElementById('auth-login').style.display=t==='login'?'':'none';document.getElementById('auth-signup').style.display=t==='signup'?'':'none';document.getElementById('at-login').classList.toggle('on',t==='login');document.getElementById('at-signup').classList.toggle('on',t==='signup');}
+var selectedGender='';
+function selGender(g){selectedGender=g;document.getElementById('s-gender').value=g;document.getElementById('gt-m').className='gt'+(g==='M'?' sel-m':'');document.getElementById('gt-f').className='gt'+(g==='F'?' sel-f':'');}
+function doSignup(){
+  var n=document.getElementById('s-name').value.trim(),e=document.getElementById('s-email').value.trim(),p=document.getElementById('s-pass').value,rn=document.getElementById('s-regno').value.trim(),g=document.getElementById('s-gender').value;
+  if(!n||!e||!p||!rn)return showToast('⚠️','Please fill all required fields.');
+  if(!e.includes('vitbhopal'))return showToast('⚠️','Use your @vitbhopal.ac.in email.');
+  if(p.length<6)return showToast('⚠️','Password must be at least 6 characters.');
+  if(!g)return showToast('⚠️','Please select your gender.');
+  fetch('http://localhost:5000/api/auth/signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:n,email:e,password:p,regno:rn,gender:g,year:document.getElementById('s-year').value,branch:document.getElementById('s-branch').value,state:document.getElementById('s-state').value||'',city:document.getElementById('s-city').value.trim()||''})})
+  .then(function(r){return r.json();})
+  .then(function(data){if(data.token){localStorage.setItem('token',data.token);USER={name:data.user.name,email:data.user.email,regno:data.user.regno,gender:data.user.gender,year:data.user.year||'',branch:data.user.branch||'',initials:data.user.name.split(' ').map(function(w){return w[0];}).join('').toUpperCase().slice(0,2),phone:'',sleep:'',study:'',college:'',noise:'',religious:'',habits:[],state:data.user.state||'',city:data.user.city||'',photoUrl:''};enterDashboard();}else{showToast('❌',data.message||'Signup failed');}})
+  .catch(function(){showToast('❌','Server se connect nahi ho paya!');});
+}
+function doLogin(){
+  var e=document.getElementById('l-email').value.trim(),p=document.getElementById('l-pass').value;
+  if(!e||!p)return showToast('⚠️','Please fill both fields.');
+  fetch('http://localhost:5000/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:e,password:p})})
+  .then(function(r){return r.json();})
+  .then(function(data){if(data.token){localStorage.setItem('token',data.token);USER={name:data.user.name,email:data.user.email,regno:data.user.regno,gender:data.user.gender,year:data.user.year||'',branch:data.user.branch||'',initials:data.user.name.split(' ').map(function(w){return w[0];}).join('').toUpperCase().slice(0,2),phone:data.user.phone||'',sleep:'',study:'',college:'',noise:'',religious:'',habits:data.user.habits||[],state:data.user.state||'',city:data.user.city||'',photoUrl:''};enterDashboard();}else{showToast('❌',data.message||'Login failed');}})
+  .catch(function(){showToast('❌','Server se connect nahi ho paya!');});
+}
+function doGoogleAuth(){
+  USER={name:'Demo Student',email:'demo@vitbhopal.ac.in',regno:'24BCE0000',gender:'M',year:'2nd Year',branch:'B.Tech CSE',initials:'DS',phone:'',sleep:'',study:'',college:'',noise:'',religious:'',habits:[],state:'',city:'',photoUrl:''};
+  enterDashboard();
+}
+function enterDashboard(){
+  document.getElementById('auth-page').style.display='none';
+  document.getElementById('chat-fab').style.display='flex';
+  updateAllAvatars();
+  document.getElementById('sb-username').textContent=USER.name;
+  document.getElementById('sb-userreg').textContent=USER.regno;
+  document.getElementById('tb-uname').textContent=USER.name.split(' ')[0];
+  document.getElementById('welcome-h1').textContent='Welcome back, '+USER.name.split(' ')[0]+' 👋';
+  syncSelfInPages();refreshProfileView();buildHostelGrid();buildRoommateProfiles();buildWardenGrid();buildWardenMiniTable();updateWardenRequestInfo();renderOpenGroups();syncSelfInPages();refreshProfileView();buildHostelGrid();buildRoommateProfiles();buildWardenGrid();buildWardenMiniTable();updateWardenRequestInfo();renderOpenGroups();updateRoomHistory();
+  showToast('✅','Welcome '+USER.name.split(' ')[0]+'!');
+}
+function syncSelfInPages(){
+  var ini=USER.initials;
+  ['crm-av-self','wr-av-self'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=ini;});
+  var e1=document.getElementById('crm-name-self');if(e1)e1.textContent=USER.name;
+  var e2=document.getElementById('wr-name-self');if(e2)e2.textContent=USER.name;
+  var e3=document.getElementById('wr-meta-self');if(e3)e3.textContent=USER.regno+' · '+USER.branch;
+  var e4=document.getElementById('rm-pf-name');if(e4)e4.textContent=USER.name;
+  var e5=document.getElementById('rm-pf-meta');if(e5)e5.textContent=USER.regno+' · '+USER.branch+' · '+USER.year;
+  var wh=document.getElementById('wr-hostel-val');if(wh)wh.textContent=USER.gender==='M'?'Boys Hostel (Top Pref.)':'Girls Hostel (Top Pref.)';
+}
+function updateAllAvatars(){
+  var ini=USER.initials;
+  ['sb-av-initials','tb-av','pf-av-big','rm-pf-avatar-big','crm-av-self','wr-av-self'].forEach(function(id){
+    var el=document.getElementById(id);if(!el)return;
+    if(USER.photoUrl){el.style.backgroundImage='url('+USER.photoUrl+')';el.style.backgroundSize='cover';el.style.backgroundPosition='center';el.textContent='';}
+    else{el.style.backgroundImage='';el.textContent=ini;}
+  });
+}
+function doLogout(){document.getElementById('auth-page').style.display='flex';document.getElementById('chat-fab').style.display='none';showToast('👋','Logged out!');}
+function openWardenAuth(){document.getElementById('warden-auth-page').classList.add('open');}
+function closeWardenAuth(){document.getElementById('warden-auth-page').classList.remove('open');}
+function doWardenLogin(){
+  var e=document.getElementById('w-email').value.trim(),p=document.getElementById('w-pass').value,b=document.getElementById('w-block').value;
+  if(!e||!p||!b)return showToast('⚠️','Please fill all fields.');
+  if(p!=='warden123')return showToast('❌','Invalid password. (Demo: warden123)');
+var found=WARDENS.find(function(w){
+  if(b==='Spl Block') return w.block==='Spl Block';
+  var m=b.match(/^(Boys|Girls) Block (\d+)$/);
+  if(!m) return false;
+  var exactBlock=(m[1]==='Boys'?"Boys' Hostel Block ":"Girls' Hostel Block ")+m[2];
+  return w.block===exactBlock;
+});
+  var wardenName=found?found.name:'Dr. Faculty FR';
+  document.getElementById('wd-block-title').textContent=b;
+  document.getElementById('wd-name-top').textContent=wardenName;
+  document.getElementById('auth-page').style.display='none';
+  buildWardenDashboard();
+document.querySelector('.sidebar').style.display='none';
+document.querySelector('.main').style.display='none';
+showWardenTab('requests');
+  document.getElementById('warden-auth-page').classList.remove('open');
+  document.getElementById('warden-dashboard').classList.add('open');
+}
+
+function closeWardenDashboard(){
+  document.getElementById('warden-dashboard').classList.remove('open');
+  document.querySelector('.sidebar').style.display='flex';
+  document.querySelector('.main').style.display='flex';
+}function buildWardenDashboard(){
+  var list=document.getElementById('wd-requests-list');
+  var blockTitle=document.getElementById('wd-block-title').textContent;
+  var isGirls=blockTitle.indexOf('Girls')>-1;
+  var demoRequests=isGirls?[
+  {id:1,name1:'Priya Sharma',reg1:'24BCE1456',name2:'Sneha Verma',reg2:'24BCE1789',hostel:'Girls Hostel 1',type:'2-Bedded AC',members:2,bedCount:2,vacantSeats:0,status:'Pending',submitted:'12 Jun 2026, 2:34 PM'},
+{id:2,name1:'Ananya Patel',reg1:'24BCE1923',name2:'Riya Mehta',reg2:'24BCE1356',hostel:'Girls Hostel 1',type:'3-Bedded Non-AC',members:2,bedCount:3,vacantSeats:1,status:'Pending',submitted:'12 Jun 2026, 11:12 AM'},
+{id:3,name1:'Kavya Reddy',reg1:'24BCE1701',name2:'Ishita Singh',reg2:'24BCA0345',hostel:'Girls Hostel 1',type:'4-Bedded AC (Bunker)',members:2,bedCount:4,vacantSeats:2,status:'Pending',submitted:'11 Jun 2026, 6:00 PM'}
+  ]:[
+  {id:1,name1:'Rahul Kumar',reg1:'24BCE1234',name2:'Arjun Kumar',reg2:'24BCE1567',hostel:'Boys Hostel 3',type:'2-Bedded AC',members:2,bedCount:2,vacantSeats:0,status:'Pending',submitted:'12 Jun 2026, 2:34 PM'},
+{id:2,name1:'Saurabh Patel',reg1:'24BCE1892',name2:'Rohan Sharma',reg2:'24BCE1302',hostel:'Boys Hostel 3',type:'3-Bedded Non-AC',members:2,bedCount:3,vacantSeats:1,status:'Pending',submitted:'12 Jun 2026, 11:12 AM'},
+{id:3,name1:'Vivek Gupta',reg1:'24BCE1678',name2:'Pranav Joshi',reg2:'24BCA0234',hostel:'Boys Hostel 3',type:'4-Bedded AC (Bunker)',members:2,bedCount:4,vacantSeats:2,status:'Pending',submitted:'11 Jun 2026, 6:00 PM'}
+  ];
+ list.innerHTML=demoRequests.map(function(r){
+  var pct=Math.round((r.members/r.bedCount)*100);
+  var vacantBadge=r.vacantSeats>0?'<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;background:var(--orange-bg);color:var(--orange-text)">🪑 '+r.vacantSeats+' seat(s) vacant</span>':'<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;background:var(--green-bg);color:var(--green-text)">✅ Full</span>';
+  var approvalNote=r.bedCount===3&&r.members<3?'<div style="font-size:11px;color:var(--red);font-weight:700;margin-top:4px">⚠️ 3-Bedded needs 3/3 members before approval</div>':'<div style="font-size:11px;color:var(--green-text);font-weight:700;margin-top:4px">✅ Eligible for approval ('+r.members+'/'+r.bedCount+' members)</div>';
+  return '<div style="background:var(--bg);border:1.5px solid var(--border);border-radius:11px;padding:14px;display:flex;flex-direction:column;gap:10px" id="wr-req-'+r.id+'">'
+    +'<div style="flex:1"><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><div style="font-size:12.5px;font-weight:800;color:var(--text)">'+r.name1+'</div><span style="font-size:10.5px;color:var(--muted)">'+r.reg1+'</span><span style="color:var(--muted)">+</span><div style="font-size:12.5px;font-weight:800;color:var(--text)">'+r.name2+'</div><span style="font-size:10.5px;color:var(--muted)">'+r.reg2+'</span></div>'
+    +'<div style="font-size:11.5px;color:var(--text2);margin-bottom:3px">🏠 '+r.hostel+' · '+r.type+'</div>'
+    +'<div style="font-size:10.5px;color:var(--muted)">Submitted: '+r.submitted+'</div></div>'
+    +'<div style="background:var(--card);border:1px solid var(--border);border-radius:9px;padding:10px 14px;margin-top:4px">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px"><span style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em">Group Status</span>'+vacantBadge+'</div>'
+    +'<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:4px"><span>Members</span><span>'+r.members+' / '+r.bedCount+'</span></div>'
+    +'<div style="height:6px;background:var(--progress-bg);border-radius:100px;overflow:hidden;margin-bottom:4px"><div style="height:100%;border-radius:100px;background:var(--navy2);width:'+pct+'%"></div></div>'
+    +approvalNote+'</div>'
+    +'<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">'
+    +'<input type="text" placeholder="Room no. e.g. H3-215" id="room-input-'+r.id+'" style="padding:7px 11px;border:1.5px solid var(--border);border-radius:7px;background:var(--card);color:var(--text);font-size:12.5px;font-family:Inter,sans-serif;outline:none;flex:1;min-width:130px"/>'
+    +'<button onclick="wardenApproveRequest('+r.id+',\''+r.name1+'\',\''+r.name2+'\')" style="padding:8px 14px;background:var(--green);color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;white-space:nowrap">✅ Approve</button>'
+    +'<button onclick="wardenRejectRequest('+r.id+')" style="padding:8px 12px;background:none;border:1.5px solid var(--red);color:var(--red);border-radius:7px;font-size:11.5px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Reject</button>'
+    +'</div></div>';
+}).join('');
+}
+function showWardenTab(tab){
+  var reqDiv=document.getElementById('wd-tab-requests');
+  var mapDiv=document.getElementById('wd-tab-roommap');
+  if(reqDiv) reqDiv.style.display = tab==='requests' ? 'block' : 'none';
+  if(mapDiv) mapDiv.style.display = tab==='roommap' ? 'block' : 'none';
+  var r=document.getElementById('wtab-requests');
+  var m=document.getElementById('wtab-roommap');
+  if(r){r.style.background=tab==='requests'?'var(--navy2)':'var(--bg)';r.style.color=tab==='requests'?'#fff':'var(--text2)';r.style.border=tab==='requests'?'none':'1.5px solid var(--border)';}
+  if(m){m.style.background=tab==='roommap'?'var(--navy2)':'var(--bg)';m.style.color=tab==='roommap'?'#fff':'var(--text2)';m.style.border=tab==='roommap'?'none':'1.5px solid var(--border)';}
+  if(tab==='roommap') renderRoomMap();
+}
+
+var ROOM_TYPES=['2-Bed AC','2-Bed Non-AC','3-Bed AC','3-Bed Non-AC','4-Bed AC','4-Bed Non-AC','6-Bed Non-AC'];
+var ROOM_CAPS={'2-Bed AC':2,'2-Bed Non-AC':2,'3-Bed AC':3,'3-Bed Non-AC':3,'4-Bed AC':4,'4-Bed Non-AC':4,'6-Bed Non-AC':6};
+var roomMapData={};
+
+var ROOM_TYPES=['2AC','2NAC','3AC','3NAC','4AC','4NAC','6NAC'];
+var ROOM_CAPS={'2AC':2,'2NAC':2,'3AC':3,'3NAC':3,'4AC':4,'4NAC':4,'6NAC':6};
+var roomMapData={};
+
+function generateFloorData(floor){
+  if(roomMapData[floor])return roomMapData[floor];
+  var rooms=[];
+  var allTypes=['2AC','2NAC','3AC','3NAC','4AC','4NAC','6NAC'];
+  var caps={'2AC':2,'2NAC':2,'3AC':3,'3NAC':3,'4AC':4,'4NAC':4,'6NAC':6};
+  for(var i=1;i<=45;i++){
+    var rt=allTypes[Math.floor(Math.random()*allTypes.length)];
+    var cap=caps[rt];
+    var occ=Math.floor(Math.random()*(cap+1));
+    var isMaint=Math.random()<0.04;
+    var status=isMaint?'maint':(occ===0?'vacant':occ===cap?'full':'partial');
+    rooms.push({number:floor*100+i,type:rt,cap:cap,occ:isMaint?0:occ,status:status});
+  }
+  roomMapData[floor]=rooms;
+  return rooms;
+}
+
+function renderRoomMap(){
+  var floorEl=document.getElementById('wd-floor-select');
+  if(!floorEl)return;
+  var floor=parseInt(floorEl.value);
+  var grid=document.getElementById('room-map-grid');
+  if(!grid)return;
+  grid.style.cssText='display:flex;flex-direction:column;gap:16px';
+  var floors=floor===0?[1,2,3,4,5]:[floor];
+  grid.innerHTML=floors.map(function(f){  
+    var rooms=generateFloorData(f);
+    var khali=rooms.filter(function(r){return r.status==='vacant';}).length;
+    var partial=rooms.filter(function(r){return r.status==='partial';}).length;
+    var full=rooms.filter(function(r){return r.status==='full';}).length;
+    return '<div>'
+      +'<div class="floor-header">'
+      +'<span style="font-size:13px;font-weight:800;color:var(--text)">🏢 Floor '+f+'</span>'
+      +'<div class="floor-stats">'
+      +'<span style="color:#16A34A">'+khali+' khali</span>'
+      +'<span style="color:#EA580C">'+partial+' partial</span>'
+      +'<span style="color:#DC2626">'+full+' full</span>'
+      +'</div></div>'
+      +'<div style="display:grid;grid-template-columns:repeat(10,1fr);gap:5px">'
+      +rooms.map(function(r){
+        return '<div class="room-cell '+r.status+'" onclick="showRoomDetail(\''+f+'\',\''+r.number+'\')" title="Room '+r.number+' · '+r.type+' · '+r.occ+'/'+r.cap+'">'
+          +'<div class="room-cell-num">'+r.number+'</div>'
+          +'<div class="room-cell-type">'+r.type+'</div>'
+          +'<div class="room-cell-occ">'+r.occ+'/'+r.cap+'</div>'
+          +'</div>';
+      }).join('')
+      +'</div></div>';
+  }).join('');
+}
+
+function showRoomDetail(floor,roomNo){
+  var rooms=roomMapData[floor];if(!rooms)return;
+  var r=rooms.find(function(x){return x.number===roomNo;});if(!r)return;
+  var panel=document.getElementById('room-detail-panel');if(!panel)return;
+  panel.style.display='block';
+  document.getElementById('rdp-room-no').textContent='Room '+r.number;
+  document.getElementById('rdp-type').textContent=r.type;
+  document.getElementById('rdp-occ').textContent=r.occ+' / '+r.cap+' occupied';
+  var statusMap={vacant:'🟢 Vacant',partial:'🟠 Partial',full:'🔴 Full',reserved:'🔵 Reserved'};
+  document.getElementById('rdp-status').textContent=statusMap[r.status]||r.status;
+  var mem=document.getElementById('rdp-members');
+  if(!mem)return;
+  if(r.members.length===0){
+    mem.innerHTML='<div style="font-size:15px;color:var(--muted);text-align:center;padding:12px">No students assigned.</div>';
+  }else{
+    mem.innerHTML='<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:8px">Assigned Students</div>'
+      +r.members.map(function(m){
+        return '<div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;margin-bottom:5px">'
+          +'<div style="width:28px;height:28px;border-radius:7px;background:var(--navy2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;flex-shrink:0">'+m.name.charAt(0)+'</div>'
+          +'<div><div style="font-size:12px;font-weight:700;color:var(--text)">'+m.name+'</div>'
+          +'<div style="font-size:10.5px;color:var(--muted)">'+m.regno+'</div></div></div>';
+      }).join('');
+  }
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function wardenApproveRequest(id,n1,n2){
+  var roomInput=document.getElementById('room-input-'+id);
+  var room=roomInput?roomInput.value.trim():'';
+  if(!room)return showToast('⚠️','Enter a room number first!');
+  var el=document.getElementById('wr-req-'+id);
+  if(el)el.innerHTML='<span style="font-size:18px">✅</span><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--green-text)">Approved — Room '+room+' assigned to '+n1+' & '+n2+'</div></div><span style="font-size:11px;color:var(--muted)">Just now</span>';
+  var cnt=document.getElementById('wd-pending-count');if(cnt)cnt.textContent=Math.max(0,(parseInt(cnt.textContent)||0)-1);
+  showToast('✅','Room '+room+' assigned to group!');
+}
+function wardenRejectRequest(id){
+  var el=document.getElementById('wr-req-'+id);
+  if(el)el.innerHTML='<span style="font-size:18px">❌</span><div style="font-size:13px;font-weight:700;color:var(--red)">Request Rejected</div>';
+  showToast('❌','Request rejected.');
+}
+function triggerPhotoUpload(){document.getElementById('pf-photo-input').click();}
+function handlePhotoUpload(input){
+  if(!input.files||!input.files[0])return;
+  var reader=new FileReader();
+  reader.onload=function(e){USER.photoUrl=e.target.result;updateAllAvatars();showToast('📷','Photo updated!');};
+  reader.readAsDataURL(input.files[0]);
+}
+function showPage(p){
+  document.querySelectorAll('.page').forEach(function(el){el.classList.remove('active');});
+  var pg=document.getElementById('page-'+p);if(pg)pg.classList.add('active');
+  document.querySelectorAll('.sb-a').forEach(function(a){a.classList.remove('on');});
+  var sn=document.getElementById('snav-'+p);if(sn)sn.classList.add('on');
+  var labels={overview:'Overview',hostel:'Hostel Preference',roommate:'Roommate Finder',opengroups:'Open Groups',confirmroommate:'Confirm Roommate',wardenrequest:'Warden Request',profile:'My Profile',roomhistory:'Room History',fees:'Fee Structure',wardens:'Warden Directory'};
+  document.getElementById('bc-label').textContent=labels[p]||p;
+  window.scrollTo(0,0);
+  if(p==='wardenrequest')wrSyncGroup();
+}
+function refreshProfileView(){
+  updateAllAvatars();
+  var pfName=document.getElementById('pf-name-disp');if(pfName)pfName.textContent=USER.name;
+  var pfSub=document.getElementById('pf-sub-disp');if(pfSub)pfSub.textContent=USER.regno+' · '+USER.branch+' · '+USER.year+' · '+(USER.gender==='M'?'Male':'Female');
+  setViewField('pfv-email',USER.email);setViewField('pfv-regno',USER.regno);setViewField('pfv-branch',USER.branch);setViewField('pfv-year',USER.year);
+  setViewField('pfv-gender',USER.gender==='M'?'Male':'Female');setViewField('pfv-phone',USER.phone,'Not added');
+  setViewField('pfv-sleep',USER.sleep,'Not set');setViewField('pfv-study',USER.study,'Not set');setViewField('pfv-college',USER.college,'Not set');
+  setViewField('pfv-noise',USER.noise,'Not set');setViewField('pfv-religious',USER.religious,'Not set');
+  setViewField('pfv-state',USER.state,'Not added');setViewField('pfv-city',USER.city,'Not added');
+  var hd=document.getElementById('pfv-habits-display');
+  if(hd){if(USER.habits.length===0)hd.innerHTML='<span style="font-size:12px;color:var(--muted);font-style:italic">No habits added</span>';
+  else hd.innerHTML=USER.habits.map(function(h){return '<span style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:100px;background:var(--blue-bg);color:var(--blue-text);border:1px solid rgba(37,99,235,0.2)">'+h+'</span>';}).join('');}
+  updateRmMyProfilePanel();updateProfileCompletion();
+}
+function setViewField(id,val,emptyText){
+  emptyText=emptyText||'—';
+  var el=document.getElementById(id);if(!el)return;
+  if(!val){el.innerHTML='<span class="empty">'+emptyText+'</span>';}else{el.textContent=val;el.className='pf-field-val';}
+}
+function updateProfileCompletion(){
+  var fields=[USER.name,USER.email,USER.regno,USER.branch,USER.year,USER.gender,USER.phone,USER.sleep,USER.study,USER.college,USER.noise,USER.religious,USER.state,USER.city];
+  var habitBonus=USER.habits.length>0?1:0;
+  var filled=fields.filter(function(f){return f&&f.trim()!='';}).length+habitBonus;
+  var pct=Math.round((filled/(fields.length+1))*100);
+  var fill=document.getElementById('pcb-fill');var pctEl=document.getElementById('pcb-pct');
+  if(fill)fill.style.width=pct+'%';if(pctEl)pctEl.textContent=pct+'%';
+}
+function updateRmMyProfilePanel(){
+  var setRm=function(id,val){var el=document.getElementById(id);if(!el)return;if(!val||val.trim()===''){el.textContent='Not set';el.className='rm-pf-val empty';}else{el.textContent=val;el.className='rm-pf-val';}};
+  setRm('rm-pf-sleep',USER.sleep);setRm('rm-pf-study',USER.study);setRm('rm-pf-noise',USER.noise);
+  setRm('rm-pf-city',USER.city?(USER.city+(USER.state?', '+USER.state:'')):'');
+  var hEl=document.getElementById('rm-pf-habits');
+  if(hEl){if(USER.habits.length===0){hEl.textContent='Not set';hEl.className='rm-pf-val empty';}else{hEl.textContent=USER.habits.slice(0,3).join(', ')+(USER.habits.length>3?'…':'');hEl.className='rm-pf-val';}}
+}
+function showProfileTab(btn,tab){
+  document.querySelectorAll('.ptab').forEach(function(b){b.classList.remove('on');});btn.classList.add('on');currentProfileTab=tab;
+  ['basic','habits','location'].forEach(function(t){
+    var vEl=document.getElementById('pftab-view-'+t);if(vEl)vEl.style.display=t===tab?'':'none';
+    var eEl=document.getElementById('pftab-edit-'+t);if(eEl)eEl.style.display=(t===tab&&profileEditMode)?'':'none';
+  });
+}
+function toggleProfileEdit(editing){
+  profileEditMode=editing;
+  document.getElementById('pf-view-mode').style.display=editing?'none':'';
+  document.getElementById('pf-edit-mode').style.display=editing?'':'none';
+  document.getElementById('pf-edit-btn').style.display=editing?'none':'';
+  document.getElementById('pf-cancel-btn').style.display=editing?'':'none';
+  if(editing){
+    var set=function(id,val){var el=document.getElementById(id);if(el)el.value=val||'';};
+    set('pe-name',USER.name);set('pe-phone',USER.phone);set('pe-branch',USER.branch);set('pe-year',USER.year);
+    set('pe-sleep',USER.sleep);set('pe-study',USER.study);set('pe-college',USER.college);set('pe-noise',USER.noise);set('pe-religious',USER.religious);
+    set('pe-state',USER.state);set('pe-city',USER.city);
+    selectedHabits=USER.habits.slice();
+    document.querySelectorAll('.habit-chip').forEach(function(c){c.classList.toggle('sel',selectedHabits.indexOf(c.dataset.val)>-1);});
+    ['basic','habits','location'].forEach(function(t){var eEl=document.getElementById('pftab-edit-'+t);if(eEl)eEl.style.display=t===currentProfileTab?'':'none';});
+  }else{refreshProfileView();}
+}
+function toggleHabit(chip){var val=chip.dataset.val;var idx=selectedHabits.indexOf(val);if(idx>-1){selectedHabits.splice(idx,1);chip.classList.remove('sel');}else{selectedHabits.push(val);chip.classList.add('sel');}}
+function saveProfile(){
+  var n=document.getElementById('pe-name').value.trim();if(!n)return showToast('⚠️','Name cannot be empty.');
+  USER.name=n;USER.initials=n.split(' ').map(function(w){return w[0];}).join('').toUpperCase().slice(0,2);
+  USER.phone=document.getElementById('pe-phone').value.trim();USER.branch=document.getElementById('pe-branch').value;USER.year=document.getElementById('pe-year').value;
+  USER.sleep=document.getElementById('pe-sleep').value;USER.study=document.getElementById('pe-study').value;USER.college=document.getElementById('pe-college').value;
+  USER.noise=document.getElementById('pe-noise').value;USER.religious=document.getElementById('pe-religious').value;
+  USER.habits=selectedHabits.slice();USER.state=document.getElementById('pe-state').value;USER.city=document.getElementById('pe-city').value.trim();
+  document.getElementById('sb-username').textContent=USER.name;document.getElementById('tb-uname').textContent=USER.name.split(' ')[0];
+  syncSelfInPages();toggleProfileEdit(false);showToast('✅','Profile saved!');
+}
+function slugify(s){return s.replace(/[\s\/\(\)]/g,'-').toLowerCase().replace(/-+/g,'-');}
+var BOYS_HOSTELS=[
+  {name:'Boys Hostel 1',block:'Block 1 (Special)',types:['2-Bedded AC','2-Bedded Non-AC','3-Bedded AC','3-Bedded Non-AC','4-Bedded AC (Bunker)','4-Bedded Non-AC (Flat)','6-Bedded AC','6-Bedded Non-AC','8-Bedded Non-AC']},
+  {name:'Boys Hostel 2',block:'Block 2',types:['2-Bedded AC','2-Bedded Non-AC','3-Bedded AC','3-Bedded Non-AC','4-Bedded AC (Bunker)','4-Bedded Non-AC (Bunker)','4-Bedded AC (Flat)','4-Bedded Non-AC (Flat)']},
+  {name:'Boys Hostel 3',block:'Block 3',types:['2-Bedded AC','2-Bedded Non-AC','3-Bedded AC','3-Bedded Non-AC','4-Bedded AC (Bunker)','4-Bedded Non-AC (Bunker)','4-Bedded AC (Flat)','4-Bedded Non-AC (Flat)']},
+  {name:'Boys Hostel 4',block:'Block 4',types:['2-Bedded AC','2-Bedded Non-AC','3-Bedded AC','3-Bedded Non-AC','4-Bedded AC (Bunker)','4-Bedded Non-AC (Bunker)','4-Bedded AC (Flat)','4-Bedded Non-AC (Flat)']},
+  {name:'Boys Hostel 5',block:'Block 5',types:['2-Bedded AC','2-Bedded Non-AC','3-Bedded AC','3-Bedded Non-AC','4-Bedded AC (Bunker)','4-Bedded Non-AC (Bunker)','4-Bedded AC (Flat)','4-Bedded Non-AC (Flat)']},
+  {name:'Boys Hostel 6',block:'Block 6',types:['2-Bedded AC','2-Bedded Non-AC','3-Bedded AC','3-Bedded Non-AC','4-Bedded AC (Bunker)','4-Bedded Non-AC (Bunker)','4-Bedded AC (Flat)','4-Bedded Non-AC (Flat)']},
+  {name:'Boys Hostel 7',block:'Block 7',types:['2-Bedded AC','2-Bedded Non-AC','3-Bedded AC','3-Bedded Non-AC','4-Bedded AC (Bunker)','4-Bedded Non-AC (Bunker)','4-Bedded AC (Flat)','4-Bedded Non-AC (Flat)']},
+  {name:'Boys Hostel 8',block:'Block 8',types:['2-Bedded AC','2-Bedded Non-AC','3-Bedded AC','3-Bedded Non-AC','4-Bedded AC (Bunker)','4-Bedded Non-AC (Bunker)','4-Bedded AC (Flat)','4-Bedded Non-AC (Flat)']}
+];
+var GIRLS_HOSTELS=[
+  {name:'Girls Hostel 1',block:'Block I (Special)',types:['1-Bedded Non-AC','2-Bedded AC','2-Bedded Non-AC','3-Bedded AC','3-Bedded Non-AC','4-Bedded AC (Bunker)','4-Bedded Non-AC (Flat)','5-Bedded Non-AC','6-Bedded AC','6-Bedded Non-AC','8-Bedded Non-AC']},
+  {name:'Girls Hostel 2',block:'Block II',types:['2-Bedded AC','2-Bedded Non-AC','3-Bedded AC','3-Bedded Non-AC','4-Bedded AC (Bunker)','4-Bedded Non-AC (Bunker)','4-Bedded AC (Flat)','4-Bedded Non-AC (Flat)']},
+  {name:'Girls Hostel 3',block:'Block III',types:['2-Bedded AC','2-Bedded Non-AC','3-Bedded AC','3-Bedded Non-AC','4-Bedded AC (Bunker)','4-Bedded Non-AC (Bunker)','4-Bedded AC (Flat)','4-Bedded Non-AC (Flat)']}
+];
+function buildHostelGrid(){
+  preferences=[];prefsSaved=false;
+  var g=USER.gender,hostels=g==='M'?BOYS_HOSTELS:GIRLS_HOSTELS;
+  document.getElementById('hp-gender-note').textContent='Showing: '+(g==='M'?'Boys Hostels (Blocks 1–8)':'Girls Hostels (Blocks I–III)');
+  var isMale=g==='M',blockBg=isMale?'var(--blue-bg)':'var(--purple-bg)',blockIcon=isMale?'🟦':'🟣';
+  document.getElementById('hostel-grid').innerHTML=hostels.map(function(h){return buildHostelBlock(h,blockBg,blockIcon);}).join('');
+  renderPrefPanel();
+}
+function buildHostelBlock(h,blockBg,blockIcon){
+  var slug=slugify(h.name);
+  var rts=h.types.map(function(rt){var rtSlug=slugify(rt);return '<div class="rtc" id="rtc-'+slug+'-'+rtSlug+'" data-hostel="'+h.name+'" data-rt="'+rt+'" onclick="toggleRoomType(\''+h.name+'\',\''+rt+'\',this)"><div class="rtc-check"></div>'+rt+'</div>';}).join('');
+  return '<div class="hostel-block"><div class="hb-head"><div class="hb-icon" style="background:'+blockBg+'">'+blockIcon+'</div><div class="hb-title">'+h.name+'</div><div class="hb-subtitle">'+h.block+'</div><div class="hb-count" id="hbcount-'+slug+'">0 selected</div></div><div class="hostel-row"><div class="hr-header" onclick="toggleHostelRow(\''+slug+'\')"><div class="hr-name" style="font-size:12px;color:var(--muted);font-weight:600">'+h.types.length+' room types</div><div class="hr-sel-count" id="hrsel-'+slug+'">0 selected</div><div class="hr-arrow" id="harrow-'+slug+'">▶</div></div><div class="hr-rooms" id="hrooms-'+slug+'"><div class="hr-rooms-label">Tick to add as preference</div><div class="rt-chips">'+rts+'</div></div></div></div>';
+}
+function toggleHostelRow(slug){var r=document.getElementById('hrooms-'+slug);var a=document.getElementById('harrow-'+slug);var o=r.classList.contains('show');r.classList.toggle('show',!o);a.classList.toggle('open',!o);}
+function toggleRoomType(hostelName,rt,el){
+  if(el.classList.contains('rtc-disabled'))return;
+  var id=hostelName+'::'+rt;var idx=preferences.findIndex(function(p){return p.id===id;});
+  if(idx>-1){preferences.splice(idx,1);el.classList.remove('sel');var b=el.querySelector('.rtc-pref-num');if(b)b.remove();}
+  else{if(preferences.length>=MAX_PREFS){showToast('⚠️','Maximum 15 preferences reached!');return;}preferences.push({id:id,hostelName:hostelName,roomType:rt});el.classList.add('sel');}
+  updateChipNumbers();updateHostelSelCount(hostelName);renderPrefPanel();
+}
+function updateChipNumbers(){
+  document.querySelectorAll('.rtc-pref-num').forEach(function(b){b.remove();});
+  preferences.forEach(function(p,i){var slug=slugify(p.hostelName);var rtSlug=slugify(p.roomType);var el=document.getElementById('rtc-'+slug+'-'+rtSlug);if(el){var badge=document.createElement('div');badge.className='rtc-pref-num';badge.textContent=i+1;el.appendChild(badge);}});
+  var atMax=preferences.length>=MAX_PREFS;
+  document.querySelectorAll('.rtc').forEach(function(el){if(!el.classList.contains('sel'))el.classList.toggle('rtc-disabled',atMax);});
+}
+function updateHostelSelCount(hostelName){
+  var slug=slugify(hostelName);var cnt=preferences.filter(function(p){return p.hostelName===hostelName;}).length;
+  var el=document.getElementById('hrsel-'+slug);var hc=document.getElementById('hbcount-'+slug);
+  if(el){el.textContent=cnt+' selected';el.className='hr-sel-count'+(cnt>0?' has-sel':'');}
+  if(hc){hc.textContent=cnt+' selected';hc.className='hb-count'+(cnt>0?' ok':'');}
+}
+function renderPrefPanel(){
+  var total=preferences.length;
+  var counter=document.getElementById('pp-counter');var empty=document.getElementById('pp-empty');var list=document.getElementById('pref-list');var status=document.getElementById('pp-status');var saveBtn=document.getElementById('pp-save-btn');
+  if(!counter)return;
+  counter.textContent=total+' / '+MAX_PREFS;counter.className='pp-counter'+(total>=MAX_PREFS?' max':total>=8?' ok':'');
+  if(total===0){empty.style.display='';list.style.display='none';}else{empty.style.display='none';list.style.display='';list.innerHTML=preferences.map(function(p,i){return buildPrefItem(p,i);}).join('');setupDragDrop();}
+  if(total===0){status.textContent='Select at least 8 preferences';status.className='pp-status warn';saveBtn.disabled=true;}
+  else if(total<8){status.textContent=total+' selected · Need '+(8-total)+' more';status.className='pp-status warn';saveBtn.disabled=true;}
+  else{status.textContent='✅ '+total+' prefs ready!';status.className='pp-status ok';saveBtn.disabled=false;}
+}
+function buildPrefItem(p,i){return '<div class="pref-item" draggable="true" data-idx="'+i+'"><div class="pref-drag-handle">⠿</div><div class="pref-num">'+(i+1)+'</div><div class="pref-info"><div class="pref-hostel">'+p.hostelName+'</div><div class="pref-room">'+p.roomType+'</div></div><div class="pref-actions"><button class="pref-btn" onclick="movePref('+i+',-1)" '+(i===0?'disabled':'')+'>↑</button><button class="pref-btn" onclick="movePref('+i+',1)" '+(i===preferences.length-1?'disabled':'')+'>↓</button><button class="pref-btn del" onclick="removePref('+i+')">✕</button></div></div>';}
+function movePref(idx,dir){var ni=idx+dir;if(ni<0||ni>=preferences.length)return;var tmp=preferences[idx];preferences[idx]=preferences[ni];preferences[ni]=tmp;updateChipNumbers();renderPrefPanel();}
+function removePref(idx){var p=preferences[idx];preferences.splice(idx,1);var slug=slugify(p.hostelName);var rtSlug=slugify(p.roomType);var el=document.getElementById('rtc-'+slug+'-'+rtSlug);if(el)el.classList.remove('sel');updateChipNumbers();updateHostelSelCount(p.hostelName);renderPrefPanel();}
+var dragSrcIdx=null;
+function setupDragDrop(){var list=document.getElementById('pref-list');if(!list)return;list.querySelectorAll('.pref-item').forEach(function(item){item.addEventListener('dragstart',function(){dragSrcIdx=parseInt(item.dataset.idx);setTimeout(function(){item.style.opacity='0.4';},0);});item.addEventListener('dragend',function(){item.style.opacity='';});item.addEventListener('dragover',function(e){e.preventDefault();item.classList.add('drag-over');});item.addEventListener('dragleave',function(){item.classList.remove('drag-over');});item.addEventListener('drop',function(e){e.preventDefault();item.classList.remove('drag-over');var ti=parseInt(item.dataset.idx);if(dragSrcIdx!==null&&dragSrcIdx!==ti){var m=preferences.splice(dragSrcIdx,1)[0];preferences.splice(ti,0,m);updateChipNumbers();renderPrefPanel();}dragSrcIdx=null;});});}
+function saveHostelPrefs(){if(preferences.length<8)return showToast('⚠️','Please select at least 8 preferences.');prefsSaved=true;document.getElementById('sb-pref-bdg').textContent='✓';document.getElementById('sb-pref-bdg').style.background='var(--green)';showToast('🎉','Preferences saved! '+preferences.length+' selections submitted.');}
+var RM_DATA=[
+  {initials:'AK',name:'Arjun Kumar',regno:'24BCE1567',branch:'B.Tech CSE',year:'2nd Year',color:'#7C3AED',compat:92,sleep:'11 PM–12 AM',study:'Night (9 PM–12 AM)',college:'Morning Batch',noise:'Moderate Noise OK',state:'Uttar Pradesh',city:'Kanpur',tags:['Night Owl','Gamer','AC Pref','Tidy']},
+  {initials:'SP',name:'Saurabh Patel',regno:'24BCE1892',branch:'B.Tech ECE',year:'2nd Year',color:'#0D9488',compat:87,sleep:'10–11 PM',study:'Evening (5–9 PM)',college:'Morning Batch',noise:'Needs Silence',state:'Madhya Pradesh',city:'Bhopal',tags:['Early Riser','Studious','Quiet']},
+  {initials:'MV',name:'Mihir Verma',regno:'24BCE2011',branch:'B.Tech ME',year:'1st Year',color:'#059669',compat:74,sleep:'12 AM–1 AM',study:'Afternoon (12–5 PM)',college:'Evening Batch',noise:'Not Sensitive to Noise',state:'Rajasthan',city:'Jaipur',tags:['Sports','AC Pref','Music']},
+  {initials:'PJ',name:'Pranav Joshi',regno:'24BCA0234',branch:'BCA',year:'1st Year',color:'#DC2626',compat:68,sleep:'After 1 AM',study:'Late Night (12 AM+)',college:'Mixed / Variable',noise:'Not Sensitive to Noise',state:'Maharashtra',city:'Pune',tags:['Gamer','Night Owl']},
+  {initials:'RS',name:'Rohan Sharma',regno:'24BCE1302',branch:'B.Tech CSE',year:'3rd Year',color:'#2563EB',compat:81,sleep:'10–11 PM',study:'Morning (5–9 AM)',college:'Morning Batch',noise:'Needs Silence',state:'Punjab',city:'Chandigarh',tags:['Studious','Early Riser','AC Pref','Quiet']},
+  {initials:'VG',name:'Vivek Gupta',regno:'24BCE1678',branch:'B.Tech ECE',year:'2nd Year',color:'#D97706',compat:63,sleep:'12 AM–1 AM',study:'Night (9 PM–12 AM)',college:'Evening Batch',noise:'Moderate Noise OK',state:'Gujarat',city:'Ahmedabad',tags:['Night Owl','AC Pref','Social']}
+,{initials:'PS',name:'Priya Sharma',regno:'24BCE1456',branch:'B.Tech CSE',year:'3rd Year',color:'#9333EA',compat:90,sleep:'10–11 PM',study:'Evening (5–9 PM)',college:'Morning Batch',noise:'Moderate Noise OK',state:'Delhi',city:'New Delhi',tags:['Early Riser','Tidy','Studious']},
+  {initials:'SV',name:'Sneha Verma',regno:'24BCE1789',branch:'B.Tech ECE',year:'2nd Year',color:'#DB2777',compat:85,sleep:'11 PM–12 AM',study:'Night (9 PM–12 AM)',college:'Morning Batch',noise:'Needs Silence',state:'Madhya Pradesh',city:'Indore',tags:['Studious','Quiet','Veg']},
+  {initials:'AP',name:'Ananya Patel',regno:'24BCE1923',branch:'B.Tech CSE',year:'1st Year',color:'#9333EA',compat:79,sleep:'12 AM–1 AM',study:'Afternoon (12–5 PM)',college:'Evening Batch',noise:'Moderate Noise OK',state:'Gujarat',city:'Surat',tags:['Music','Social','AC Pref']},
+  {initials:'RM',name:'Riya Mehta',regno:'24BCE1356',branch:'BCA',year:'2nd Year',color:'#DB2777',compat:72,sleep:'After 1 AM',study:'Late Night (12 AM+)',college:'Mixed / Variable',noise:'Not Sensitive to Noise',state:'Maharashtra',city:'Mumbai',tags:['Night Owl','Gamer']},
+  {initials:'KR',name:'Kavya Reddy',regno:'24BCE1701',branch:'B.Tech ECE',year:'3rd Year',color:'#9333EA',compat:88,sleep:'10–11 PM',study:'Morning (5–9 AM)',college:'Morning Batch',noise:'Needs Silence',state:'Telangana',city:'Hyderabad',tags:['Early Riser','Quiet','AC Pref']},
+  {initials:'IS',name:'Ishita Singh',regno:'24BCA0345',branch:'BCA',year:'1st Year',color:'#DB2777',compat:67,sleep:'12 AM–1 AM',study:'Evening (5–9 PM)',college:'Evening Batch',noise:'Moderate Noise OK',state:'Uttar Pradesh',city:'Lucknow',tags:['Social','Music']}
+];
+function buildRoommateProfiles(){
+  var filtered=RM_DATA.filter(function(p){
+    if(p.regno===USER.regno) return false;
+    if(USER.gender==='F') return ['24BCE1456','24BCE1789','24BCE1923','24BCE1356'].indexOf(p.regno)>-1;
+    return ['24BCE1567','24BCE1892','24BCE2011','24BCA0234','24BCE1302','24BCE1678'].indexOf(p.regno)>-1;
+  });
+  if(!filtered.length) filtered=RM_DATA.filter(function(p){return p.regno!==USER.regno;});
+  renderRoommateProfiles(filtered);
+}
+  
+function renderRoommateProfiles(data){
+  var grid=document.getElementById('rm-profiles');if(!grid)return;
+  grid.innerHTML=data.map(function(p){
+    var existing=sentRequests.find(function(r){return r.regno===p.regno;});
+    var isAccepted=existing&&existing.status==='accepted';
+    var isSent=existing&&existing.status==='sent';
+    var c=p.compat>=80?{bar:'var(--green)',text:'var(--green-text)'}:p.compat>=65?{bar:'var(--gold)',text:'var(--orange-text)'}:{bar:'var(--orange)',text:'var(--orange-text)'};
+    var btnHtml=isAccepted?'<button class="btn-rm-req sent" disabled>✓ Accepted</button>':isSent?'<button class="btn-rm-req" style="background:var(--muted);cursor:default" disabled>Request Sent</button>':'<button class="btn-rm-req" onclick="sendRmRequest(\''+p.regno+'\',\''+p.name+'\',\''+p.initials+'\',\''+p.color+'\',this)">Send Request →</button>';
+    return '<div class="rm-profile-card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div class="rm-av-big" style="background:'+p.color+'">'+p.initials+'</div><div style="flex:1;min-width:0"><div class="rm-name">'+p.name+'</div><div style="font-size:10.5px;color:var(--muted)">'+p.regno+'</div><div style="font-size:10.5px;color:var(--muted)">'+p.branch+' · '+p.year+'</div></div></div><div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px 10px;margin-bottom:8px;font-size:11.5px;display:flex;flex-direction:column;gap:3px"><div style="display:flex;gap:6px;color:var(--text2)"><span style="color:var(--muted);font-size:10px;min-width:56px">🌙 Sleep</span>'+p.sleep+'</div><div style="display:flex;gap:6px;color:var(--text2)"><span style="color:var(--muted);font-size:10px;min-width:56px">🔊 Noise</span>'+p.noise+'</div><div style="display:flex;gap:6px;color:var(--text2)"><span style="color:var(--muted);font-size:10px;min-width:56px">📍 City</span>'+p.city+', '+p.state+'</div></div><div class="rm-tags">'+p.tags.map(function(t){return '<span class="rm-tag">'+t+'</span>';}).join('')+'</div><div class="rm-compat"><div style="font-size:10px;color:var(--muted);margin-right:4px;white-space:nowrap">Match</div><div class="rm-compat-bar"><div class="rm-compat-fill" style="width:'+p.compat+'%;background:'+c.bar+'"></div></div><div class="rm-compat-pct" style="color:'+c.text+'">'+p.compat+'%</div></div><div style="display:flex;gap:6px;margin-top:8px">'+btnHtml+'<button class="rm-chat-btn" style="width:auto;padding:8px 12px;flex-shrink:0" onclick="openChat(\''+p.regno+'\',\''+p.name+'\',\''+p.initials+'\',\''+p.color+'\')">💬 Chat</button></div></div>';
+  }).join('');
+}
+function sendRmRequest(regno,name,initials,color,btnEl){
+  if(sentRequests.find(function(r){return r.regno===regno;}))return;
+  sentRequests.push({regno:regno,name:name,initials:initials,color:color,status:'sent'});
+  if(btnEl&&btnEl.parentElement){var btns=btnEl.parentElement.querySelectorAll('.btn-rm-req');btns.forEach(function(b){b.textContent='Request Sent';b.style.background='var(--muted)';b.disabled=true;});}
+  renderRequestsList();showToast('📩','Request sent to '+name+'!');
+  if(sentRequests.filter(function(r){return r.status==='accepted';}).length===0){
+    setTimeout(function(){var r=sentRequests.find(function(x){return x.regno===regno;});if(r){r.status='accepted';renderRequestsList();renderRoommateProfiles(RM_DATA);showToast('🎉',name+' accepted your request!');}},2200);
+  }
+}
+function renderRequestsList(){
+  var list=document.getElementById('req-list');var badge=document.getElementById('req-count-badge');if(!list)return;
+  if(sentRequests.length===0){list.innerHTML='<div style="font-size:11.5px;color:var(--muted);text-align:center;padding:14px 0">No requests sent yet.</div>';if(badge){badge.textContent='0 Sent';badge.style.background='var(--progress-bg)';badge.style.color='var(--muted)';}return;}
+  if(badge){badge.textContent=sentRequests.length+' Sent';badge.style.background='var(--blue-bg)';badge.style.color='var(--blue-text)';}
+  list.innerHTML=sentRequests.map(function(r){return '<div class="req-item"><div class="req-av" style="background:'+r.color+'">'+r.initials+'</div><div style="flex:1"><div style="font-size:12px;font-weight:700;color:var(--text)">'+r.name+'</div><div style="font-size:10px;color:var(--muted)">'+r.regno+'</div></div><span style="font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:100px;'+(r.status==='accepted'?'background:var(--green-bg);color:var(--green-text)':'background:var(--orange-bg);color:var(--orange-text)')+'">'+(r.status==='accepted'?'✓ Accepted':'Sent')+'</span></div>';}).join('');
+}
+function filterRoommates(val){
+  var q=(val||'').toLowerCase();
+  var branch=document.getElementById('rm-branch-filter').value||'';
+  var year=document.getElementById('rm-year-filter').value||'';
+  var sleep=document.getElementById('rm-sleep-filter').value||'';
+  var filtered=RM_DATA.filter(function(p){
+    var matchQ=!q||(p.name.toLowerCase().indexOf(q)>-1||p.regno.toLowerCase().indexOf(q)>-1);
+    var matchB=!branch||p.branch===branch;var matchY=!year||p.year===year;var matchS=!sleep||p.tags.indexOf(sleep)>-1;
+    return matchQ&&matchB&&matchY&&matchS;
+  });
+  renderRoommateProfiles(filtered);
+}
+var CHAT_STARTERS=["Hey! Saw your profile — we seem like a good match 👋","Hi! Are you looking for a roommate for Boys Hostel?","Hey, your sleep schedule matches mine perfectly lol 😄","Hi there! Noticed we're both from the same state 🙌"];
+function openChat(regno,name,initials,color){
+  if(!activeChats[regno]){
+    activeChats[regno]={name:name,initials:initials,color:color,msgs:[]};
+    setTimeout(function(){
+      var starter=CHAT_STARTERS[Math.floor(Math.random()*CHAT_STARTERS.length)];
+      activeChats[regno].msgs.push({from:'them',text:starter,time:chatTime()});
+      if(activeChatReg===regno)renderChatMsgs();
+      updateChatFab();
+    },1000);
+  }
+  activeChatReg=regno;
+  document.getElementById('chat-av').textContent=initials;
+  document.getElementById('chat-av').style.background=color;
+  document.getElementById('chat-name').textContent=name;
+  document.getElementById('chat-status').textContent='🟢 Online';
+  document.getElementById('chat-overlay').classList.add('open');
+  document.getElementById('chat-list-panel').style.display='none';
+  chatListOpen=false;
+  renderChatMsgs();updateChatListItems();
+  setTimeout(function(){document.getElementById('chat-input').focus();},100);
+}
+function closeChatOnOverlay(e){if(e.target===document.getElementById('chat-overlay'))closeChat();}
+function closeChat(){document.getElementById('chat-overlay').classList.remove('open');activeChatReg=null;}
+function sendChatMsg(){
+  var inp=document.getElementById('chat-input');var txt=inp.value.trim();if(!txt||!activeChatReg)return;
+  activeChats[activeChatReg].msgs.push({from:'me',text:txt,time:chatTime()});
+  inp.value='';renderChatMsgs();updateChatListItems();
+  var replies=["That sounds great! 😊","Sure, let's discuss more!","Haha yeah same here!","Cool! What block are you looking at?","I'll check with my current plans and let you know.","Sounds good to me! When do preferences close?","Nice! I'm also going for the same hostel block."];
+  var reg=activeChatReg;
+  setTimeout(function(){
+    if(activeChats[reg]){
+      activeChats[reg].msgs.push({from:'them',text:replies[Math.floor(Math.random()*replies.length)],time:chatTime()});
+      if(activeChatReg===reg)renderChatMsgs();
+      updateChatListItems();
+      if(!document.getElementById('chat-overlay').classList.contains('open'))updateChatFab();
+    }
+  },1000+Math.random()*1000);
+}
+function renderChatMsgs(){
+  if(!activeChatReg)return;
+  var chat=activeChats[activeChatReg];if(!chat)return;
+  var el=document.getElementById('chat-messages');
+  if(!chat.msgs.length){el.innerHTML='<div style="text-align:center;padding:24px 0;font-size:12px;color:var(--muted)">Start a conversation! 👋</div>';return;}
+  el.innerHTML=chat.msgs.map(function(m){return '<div class="msg-row'+(m.from==='me'?' mine':'')+'"><div class="msg-av" style="background:'+(m.from==='me'?'var(--navy2)':chat.color)+'">'+(m.from==='me'?USER.initials:chat.initials)+'</div><div><div class="msg-bubble">'+escapeHtml(m.text)+'</div><div class="msg-time">'+m.time+'</div></div></div>';}).join('');
+  el.scrollTop=el.scrollHeight;
+}
+function escapeHtml(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function chatTime(){var n=new Date();return n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0');}
+function toggleChatList(){chatListOpen=!chatListOpen;document.getElementById('chat-list-panel').style.display=chatListOpen?'block':'none';if(chatListOpen)updateChatListItems();}
+function updateChatListItems(){
+  var el=document.getElementById('chat-list-items');var cntEl=document.getElementById('chat-list-count');var keys=Object.keys(activeChats);
+  if(cntEl)cntEl.textContent=keys.length+' active';
+  if(!keys.length){el.innerHTML='<div style="padding:20px;text-align:center;font-size:12px;color:var(--muted)">No chats yet. Go to Roommate Finder!</div>';return;}
+  el.innerHTML=keys.map(function(k){var c=activeChats[k];var last=c.msgs[c.msgs.length-1];return '<div onclick="openChat(\''+k+'\',\''+c.name+'\',\''+c.initials+'\',\''+c.color+'\')" style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer" onmouseover="this.style.background=\'var(--bg)\'" onmouseout="this.style.background=\'\'"><div style="width:34px;height:34px;border-radius:9px;background:'+c.color+';display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0">'+c.initials+'</div><div style="flex:1;min-width:0"><div style="font-size:12.5px;font-weight:700;color:var(--text)">'+c.name+'</div><div style="font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+(last?last.text:'Start chatting...')+'</div></div><div style="font-size:10px;color:var(--muted)">'+(last?last.time:'')+'</div></div>';}).join('');
+}
+function updateChatFab(){var badge=document.getElementById('chat-fab-badge');if(badge)badge.style.display=Object.keys(activeChats).length>0?'flex':'none';}
+function crmUpdateStep(step){
+  [1,2,3].forEach(function(n){var num=document.getElementById('spn-'+n);var block=document.getElementById('sp-'+n);if(!num)return;
+    if(n<step){num.className='sp-num done';num.textContent='✓';if(block)block.className='sp-item done';}
+    else if(n===step){num.className='sp-num active';num.textContent=n;if(block)block.className='sp-item active';}
+    else{num.className='sp-num inactive';num.textContent=n;if(block)block.className='sp-item';}
+  });
+}
+function crmCheckEligibility(){
+  var reg=document.getElementById('crm-regno-input').value.trim();var res=document.getElementById('crm-reg-result');
+  if(!reg){showToast('⚠️','Enter a registration number first.');return;}
+  var otp=Math.floor(100000+Math.random()*900000);crmPendingOTP=otp;crmPendingReg=reg;
+  var found=RM_DATA.find(function(p){return p.regno===reg;});crmPendingName=found?found.name:'Student ('+reg+')';
+  res.style.display='block';
+  res.innerHTML='<div style="display:flex;align-items:center;gap:10px;background:var(--green-bg);border:1px solid rgba(22,163,74,0.2);border-radius:9px;padding:12px 16px"><span style="font-size:20px">✅</span><div><div style="font-size:13px;font-weight:700;color:var(--green-text)">'+crmPendingName+' is eligible!</div><div style="font-size:11.5px;color:var(--green-text);opacity:0.85;margin-top:2px">OTP sent to their VIT email. Ask them to share it.</div></div></div>';
+  document.getElementById('crm-block-otp').style.display='block';
+  var info=document.getElementById('crm-otp-target-info');
+  if(info)info.innerHTML='Sending request to: <b>'+crmPendingName+'</b> <span style="color:var(--muted)">('+reg+')</span><br><span style="font-size:11px;color:var(--muted)">OTP has been sent to their VIT email — ask them to share it with you</span>';
+  crmUpdateStep(2);
+  setTimeout(function(){showToast('📩','Demo OTP for testing: '+otp);},600);
+}
+function crmVerifyOTP(){
+  var entered=document.getElementById('crm-otp-input').value.trim();var res=document.getElementById('crm-otp-result');res.style.display='block';
+  if(entered==crmPendingOTP){
+    res.innerHTML='<div style="background:var(--green-bg);border:1px solid rgba(22,163,74,0.2);border-radius:8px;padding:10px 14px;font-size:13px;font-weight:700;color:var(--green-text)">✅ OTP Verified! Roommate confirmed.</div>';
+    crmGroupConfirmed=true;
+    var slot2=document.getElementById('crm-slot-2');
+    if(slot2){slot2.style.borderStyle='solid';slot2.style.borderColor='rgba(22,163,74,0.3)';slot2.style.background='var(--green-bg)';
+      slot2.innerHTML='<div style="width:30px;height:30px;border-radius:7px;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;flex-shrink:0">'+((crmPendingName||'R').split(' ').map(function(w){return w[0];}).join('').slice(0,2))+'</div><div style="flex:1"><div style="font-size:12px;font-weight:700;color:var(--text)">'+crmPendingName+'</div><div style="font-size:10px;color:var(--green-text);font-weight:700">'+crmPendingReg+'</div></div><span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:100px;background:var(--green-bg);color:var(--green-text)">✓ CONFIRMED</span>';}
+    document.getElementById('crm-group-counter').textContent='2 / 2';document.getElementById('crm-group-counter').style.background='var(--green-bg)';document.getElementById('crm-group-counter').style.color='var(--green-text)';
+    var wBtn=document.getElementById('crm-warden-btn');
+    if(wBtn){wBtn.disabled=false;wBtn.style.cssText='width:100%;padding:9px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif';wBtn.onclick=function(){showPage('wardenrequest');};}
+    document.getElementById('crm-block-group').style.display='block';
+    var mem=document.getElementById('crm-group-members');
+    if(mem)mem.innerHTML='<div class="grp-member" style="background:var(--blue-bg);border-color:rgba(37,99,235,0.2)"><div class="sb-av" style="width:34px;height:34px;font-size:12px">'+USER.initials+'</div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text)">'+USER.name+'</div><div style="font-size:11px;color:var(--muted)">'+USER.regno+' · Room Owner</div></div><span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;background:var(--green-bg);color:var(--green-text)">✓ Confirmed</span></div><div class="grp-member" style="background:var(--green-bg);border-color:rgba(22,163,74,0.2)"><div style="width:34px;height:34px;border-radius:8px;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0">'+((crmPendingName||'R').split(' ').map(function(w){return w[0];}).join('').slice(0,2))+'</div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text)">'+crmPendingName+'</div><div style="font-size:11px;color:var(--muted)">'+crmPendingReg+'</div></div><span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;background:var(--green-bg);color:var(--green-text)">✓ Confirmed</span></div>';
+    crmUpdateStep(3);showToast('🎉','Roommate confirmed! Group is ready.');
+  }else{
+    res.innerHTML='<div style="background:var(--red-bg);border:1px solid rgba(220,38,38,0.2);border-radius:8px;padding:10px 14px;font-size:13px;font-weight:700;color:var(--red)">❌ Wrong OTP. Please try again.</div>';
+    showToast('❌','Invalid OTP — try again.');
+  }
+}
+function crmResendOTP(){var otp=Math.floor(100000+Math.random()*900000);crmPendingOTP=otp;showToast('📩','New OTP (demo): '+otp);}
+function getWardenForUser(){
+  if(USER.gender==='M'){return WARDENS.filter(function(w){return w.block==="Boys' Hostel Block 3";});}
+  else{return WARDENS.filter(function(w){return w.block==="Girls' Hostel Block 1";});}
+}
+function updateWardenRequestInfo(){
+  var box=document.getElementById('wr-warden-details-box');if(!box)return;
+  var wardens=getWardenForUser();
+  if(!wardens.length){box.innerHTML='<div style="font-size:15px;color:var(--muted)">No warden assigned yet.</div>';return;}
+  box.innerHTML=wardens.map(function(w){return '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid rgba(37,99,235,0.1)"><div style="width:34px;height:34px;border-radius:8px;background:'+w.color+';display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0">'+w.initials+'</div><div style="flex:1"><div style="font-size:12.5px;font-weight:800;color:var(--text)">'+w.name+'</div><div style="font-size:10.5px;color:var(--muted)">'+w.dept+' · '+w.block+'</div><div style="font-size:11px;margin-top:3px;display:flex;gap:10px;flex-wrap:wrap"><a href="mailto:'+w.email+'" style="color:var(--navy2);text-decoration:none;font-weight:600">📧 '+w.email+'</a>'+(w.phone?'<span style="color:var(--text2)">📞 '+w.phone+'</span>':'')+'</div></div></div>';}).join('');
+}
+function wrSyncGroup(){
+  if(!crmGroupConfirmed)return;
+  var slot2=document.getElementById('wr-slot-2');
+  if(slot2)slot2.innerHTML='<div style="width:36px;height:36px;border-radius:9px;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0">'+((crmPendingName||'R').split(' ').map(function(w){return w[0];}).join('').slice(0,2))+'</div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text)">'+crmPendingName+'</div><div style="font-size:11px;color:var(--muted)">'+crmPendingReg+' · Confirmed ✓</div></div><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;background:var(--green-bg);color:var(--green-text)">Roommate</span>';
+  var badge=document.getElementById('wr-group-badge');if(badge){badge.textContent='2/2 — Ready';badge.style.background='var(--green-bg)';badge.style.color='var(--green-text)';}
+  var sizeVal=document.getElementById('wr-size-val');if(sizeVal)sizeVal.textContent='2 / 2';
+  var btn=document.getElementById('wr-submit-btn');
+  if(btn&&!wrSubmitted){btn.disabled=false;btn.style.cssText='width:100%;padding:14px;background:var(--navy2);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;transition:all 0.3s';}
+  var note=document.getElementById('wr-submit-note');if(note){note.textContent='✅ Group complete — ready to submit to Warden!';note.style.color='var(--green-text)';}
+  updateWardenRequestInfo();
+}
+function wrSubmitToWarden(){
+  if(!crmGroupConfirmed){showToast('⚠️','Please confirm your roommate first.');return;}
+  if(wrSubmitted)return;
+  var roomType=preferences.length>0?preferences[0].roomType:'2-Bedded AC';
+  var bedCount=2;
+  if(roomType.indexOf('3-Bed')>-1||roomType.indexOf('Three')>-1)bedCount=3;
+  else if(roomType.indexOf('4-Bed')>-1||roomType.indexOf('Four')>-1)bedCount=4;
+  else if(roomType.indexOf('5-Bed')>-1)bedCount=5;
+  else if(roomType.indexOf('6-Bed')>-1||roomType.indexOf('Six')>-1)bedCount=6;
+  else if(roomType.indexOf('8-Bed')>-1||roomType.indexOf('Eight')>-1)bedCount=8;
+  var currentMembers=crmGroupConfirmed?2:1;
+  var vacantSeats=bedCount-currentMembers;
+  if(bedCount===3&&currentMembers<3){showToast('⚠️','3-Bedded room ke liye 3/3 members chahiye!');var btn=document.getElementById('wr-submit-btn');if(btn){btn.textContent='⚠️ Need 3/3 Members for 3-Bedded';btn.style.background='var(--orange)';}return;}
+  if(bedCount>=4&&currentMembers<2){showToast('⚠️','Minimum 2 members required.');return;}
+  wrSubmitted=true;
+  window._bedCount=bedCount;window._vacantSeats=vacantSeats;window._currentMembers=currentMembers;
+  var bar=document.getElementById('wr-status-bar');
+  bar.style.background='var(--blue-bg)';bar.style.border='1px solid rgba(37,99,235,0.2)';
+  document.getElementById('wr-status-icon').textContent='⏳';
+  document.getElementById('wr-status-title').textContent='Submitted — Awaiting Warden Approval';
+  document.getElementById('wr-status-title').style.color='var(--blue-text)';
+  document.getElementById('wr-status-sub').textContent='Your group has been submitted. Warden will review within 24–48 hours.';
+  document.getElementById('wr-status-sub').style.color='var(--blue-text)';
+  var btn=document.getElementById('wr-submit-btn');
+  if(btn){btn.disabled=true;btn.style.background='var(--orange)';btn.textContent='⏳ Submitted — Awaiting Warden Approval';}
+  showToast('📋','Group submitted to Warden!');
+  setTimeout(function(){wrApproveByWarden();},3000);
+}
+function wrApproveByWarden(){
+  var bedCount=window._bedCount||2;
+  var vacantSeats=window._vacantSeats||0;
+  var currentMembers=window._currentMembers||2;
+
+  var prefix=USER.gender==='M'?'H':'G';
+  var hostelNum=Math.floor(Math.random()*3)+1;
+  var floorNum=Math.floor(Math.random()*4)+1;
+  var roomNum=Math.floor(Math.random()*20)+1;
+  var generatedRoom=prefix+hostelNum+'-'+floorNum+(roomNum<10?'0'+roomNum:roomNum);
+
+  // Room number rule:
+  // 3-Bedded ya 2-Bedded → seedha room number milega
+  // 4-8 Bedded → room number tab milega jab room fill ho
+  var giveRoomNow=(bedCount<=3);
+  if(giveRoomNow){assignedRoomNumber=generatedRoom;}
+  else{assignedRoomNumber='Pending ('+currentMembers+'/'+bedCount+' filled)';}
+
+  window._pendingRoomFull=(bedCount>=4);
+  window._generatedRoom=generatedRoom;
+  window._bedCount=bedCount;
+  window._vacantSeats=vacantSeats;
+  window._currentMembers=currentMembers;
+
+  var wardens=getWardenForUser();
+  var wName=wardens.length?wardens[0].name:'Dr. R.K. Sharma';
+
+  var bar=document.getElementById('wr-status-bar');
+  bar.style.background='var(--green-bg)';bar.style.border='1px solid rgba(22,163,74,0.2)';
+  document.getElementById('wr-status-icon').textContent='✅';
+  document.getElementById('wr-status-title').textContent='Warden Approved!';
+  document.getElementById('wr-status-title').style.color='var(--green-text)';
+
+  var statusMsg=giveRoomNow
+    ?'Room '+assignedRoomNumber+' assigned!'
+    :'Approved! Room number will be assigned when room is full ('+currentMembers+'/'+bedCount+' members).';
+  document.getElementById('wr-status-sub').textContent=statusMsg;
+  document.getElementById('wr-status-sub').style.color='var(--green-text)';
+
+  var badge=document.getElementById('wr-room-badge');
+  if(badge){
+    badge.style.display='block';
+    document.getElementById('wr-room-number').textContent=giveRoomNow?assignedRoomNumber:currentMembers+'/'+bedCount;
+    if(!giveRoomNow){badge.style.background='var(--orange)';badge.querySelector('div:first-child').textContent='Members Filled';}
+  }
+  
+
+  var card=document.getElementById('wr-approved-card');if(card)card.style.display='block';
+  document.getElementById('wr-final-room').textContent=giveRoomNow?assignedRoomNumber:'⏳ Pending';
+  document.getElementById('wr-final-room').style.fontSize=giveRoomNow?'56px':'32px';
+  document.getElementById('wr-final-warden-name').textContent=wName;
+  document.getElementById('wr-approved-date').textContent=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+
+  // Vacant seats info add karo approved card ke andar
+  var approvedCard=document.getElementById('wr-approved-card');
+  if(approvedCard&&!giveRoomNow){
+    var existingVacant=document.getElementById('wr-vacant-info');
+    if(!existingVacant){
+      var vacantDiv=document.createElement('div');
+      vacantDiv.id='wr-vacant-info';
+      vacantDiv.style.cssText='margin:0 22px 18px;background:var(--orange-bg);border:1px solid rgba(234,88,12,0.2);border-radius:10px;padding:13px 16px;font-size:12.5px;color:var(--text2);line-height:1.7';
+      vacantDiv.innerHTML='🪑 <b>'+vacantSeats+' seat(s) vacant</b> in your '+bedCount+'-bedded room.<br>Room number will be assigned once all seats are filled.<br><span style="font-size:11.5px;color:var(--orange-text);font-weight:700">New students can join your group from Roommate Finder → Open Groups.</span>';
+      var lastNote=approvedCard.querySelector('div[style*="padding:22px"] div:last-child');
+      if(lastNote)lastNote.parentNode.insertBefore(vacantDiv,lastNote);
+    }
+  }
+
+  // Room history update
+  var rh=document.getElementById('rh-curr-room');if(rh)rh.textContent=giveRoomNow?assignedRoomNumber:'Approved (Pending Room No.)';
+  var sem5Room=document.getElementById('rh-sem5-room');if(sem5Room)sem5Room.textContent=giveRoomNow?assignedRoomNumber:'Approved - Pending';
+  var sem5Status=document.getElementById('rh-sem5-status');
+  if(sem5Status){sem5Status.textContent='Approved';sem5Status.style.background='var(--green-bg)';sem5Status.style.color='var(--green-text)';}
+
+  var toastMsg=giveRoomNow?'🎉 Room '+assignedRoomNumber+' assigned!':'✅ Approved! Room no. pending until room fills.';
+  showToast('🎉',toastMsg);
+addToOpenGroups();renderOpenGroups();
+}
+function addToOpenGroups(){
+  var bedCount=window._bedCount||2;
+  var vacantSeats=window._vacantSeats||0;
+  var currentMembers=window._currentMembers||2;
+  if(vacantSeats<=0)return;
+  var roomType=preferences.length>0?preferences[0].roomType:'Unknown';
+  var hostelName=preferences.length>0?preferences[0].hostelName:'Unknown Hostel';
+  var existingIdx=openGroups.findIndex(function(g){return g.ownerId===USER.regno;});
+  if(existingIdx>-1)return;
+  openGroups.push({
+    id:'grp-'+Date.now(),
+    ownerId:USER.regno,
+    ownerName:USER.name,
+    ownerInitials:USER.initials,
+    hostelName:hostelName,
+    roomType:roomType,
+    bedCount:bedCount,
+    currentMembers:currentMembers,
+    vacantSeats:vacantSeats,
+    members:[{name:USER.name,regno:USER.regno,initials:USER.initials,color:'var(--navy2)'}],
+    approvedOn:new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})
+  });
+}
+
+function renderOpenGroups(){
+  var container=document.getElementById('open-groups-container');
+  if(!container)return;
+  var groups=openGroups.filter(function(g){
+    if(USER.gender==='M') return g.hostelName.indexOf('Boys')>-1;
+    return g.hostelName.indexOf('Girls')>-1;
+  });
+  if(!groups.length){
+    container.innerHTML='<div style="text-align:center;padding:32px;color:var(--muted);font-size:13px">No open groups yet.</div>';
+    return;
+  }
+  container.innerHTML=groups.map(function(g){
+    var pct=Math.round((g.currentMembers/g.bedCount)*100);
+    var alreadyMember=g.members.find(function(m){return m.regno===USER.regno;});
+    var btnHtml=alreadyMember
+      ?'<button disabled style="width:100%;padding:9px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;font-family:Inter,sans-serif">✓ You are in this group</button>'
+      :'<button onclick="joinOpenGroup(\''+g.id+'\')" style="width:100%;padding:9px;background:var(--navy2);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Join Group →</button>';
+    return '<div style="background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:14px">'
+      +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">'
+      +'<div style="width:38px;height:38px;border-radius:9px;background:var(--navy2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff">'+g.ownerInitials+'</div>'
+      +'<div style="flex:1"><div style="font-size:13px;font-weight:800;color:var(--text)">'+g.hostelName+'</div>'
+      +'<div style="font-size:11px;color:var(--muted)">'+g.roomType+' · Owner: '+g.ownerName+'</div></div>'
+      +'<span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;background:var(--green-bg);color:var(--green-text)">✅ Approved</span>'
+      +'</div>'
+      +'<div style="margin-bottom:10px">'
+      +'<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:4px"><span>Members</span><span>'+g.currentMembers+' / '+g.bedCount+'</span></div>'
+      +'<div style="height:6px;background:var(--progress-bg);border-radius:100px;overflow:hidden"><div style="height:100%;border-radius:100px;background:var(--navy2);width:'+pct+'%"></div></div>'
+      +'</div>'
+      +'<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px">'
+      +g.members.map(function(m){return '<span style="font-size:10.5px;font-weight:600;padding:3px 9px;border-radius:100px;background:var(--bg);border:1px solid var(--border);color:var(--text2)">'+m.name+'</span>';}).join('')
+      +'<span style="font-size:10.5px;padding:3px 9px;border-radius:100px;background:var(--orange-bg);color:var(--orange-text);font-weight:700">'+g.vacantSeats+' seat(s) vacant</span>'
+      +'</div>'
+      +btnHtml
+      +'</div>';
+  }).join('');
+}
+
+function joinOpenGroup(groupId){
+  var g=openGroups.find(function(x){return x.id===groupId;});
+  if(!g){showToast('❌','Group not found.');return;}
+  if(g.vacantSeats<=0){showToast('⚠️','This group is already full!');return;}
+  var alreadyIn=g.members.find(function(m){return m.regno===USER.regno;});
+  if(alreadyIn){showToast('⚠️','You are already in this group.');return;}
+  g.members.push({name:USER.name,regno:USER.regno,initials:USER.initials,color:'var(--navy2)'});
+  g.currentMembers+=1;
+  g.vacantSeats-=1;
+  if(g.vacantSeats===0){
+    g.roomNumber=window._generatedRoom||'H3-'+Math.floor(Math.random()*200+100);
+    showToast('🎉','Room '+g.roomNumber+' assigned — group is full!');
+  }else{
+    showToast('✅','You joined the group! '+g.vacantSeats+' seat(s) still vacant.');
+  }
+  renderOpenGroups();
+}
+function buildWardenGrid(){
+  var bg=document.getElementById('warden-boys-grid');var gg=document.getElementById('warden-girls-grid');var sg=document.getElementById('warden-spl-grid');
+  if(bg)bg.innerHTML=WARDENS.filter(function(w){return w.block.indexOf('Boys')>-1;}).map(wardenCard).join('');
+  if(gg)gg.innerHTML=WARDENS.filter(function(w){return w.block.indexOf('Girls')>-1;}).map(wardenCard).join('');
+  if(sg)sg.innerHTML=WARDENS.filter(function(w){return w.block==='Spl Block';}).map(wardenCard).join('');
+}
+function wardenCard(w){
+  return '<div class="warden-card"><div class="warden-card-head"><div class="warden-av" style="background:'+w.color+'">'+w.initials+'</div><div><div class="warden-name">'+w.name+'</div><div class="warden-dept">'+w.dept+'</div></div><div class="warden-block-badge">'+w.block+'</div></div><div class="warden-body"><div class="warden-info-item"><span>📧</span><a href="mailto:'+w.email+'">'+w.email+'</a></div><div class="warden-info-item"><span>📞</span><span>'+(w.phone||'N/A')+'</span></div></div></div>';
+}
+function buildWardenMiniTable(){
+  var tb=document.getElementById('warden-mini-table');if(!tb)return;
+  tb.innerHTML=WARDENS.map(function(w,i){return '<tr style="border-top:1px solid var(--border)"><td style="padding:8px 12px;color:var(--muted)">'+(i+1)+'</td><td style="padding:8px 12px;font-weight:600;color:var(--text)">'+w.name+'</td><td style="padding:8px 12px;color:var(--text2)">'+w.dept+'</td><td style="padding:8px 12px"><a href="mailto:'+w.email+'" style="color:var(--navy2);font-size:11.5px;text-decoration:none">'+w.email+'</a></td><td style="padding:8px 12px;color:var(--text2)">'+(w.phone||'—')+'</td><td style="padding:8px 12px"><span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:100px;background:var(--blue-bg);color:var(--blue-text)">'+w.block+'</span></td></tr>';}).join('');
+}
+function filterWardens(q){var lq=q.toLowerCase();var rows=document.querySelectorAll('#warden-mini-table tr');rows.forEach(function(r){r.style.display=r.textContent.toLowerCase().indexOf(lq)>-1?'':'none';});}
+function filterWardensByBlock(b){var rows=document.querySelectorAll('#warden-mini-table tr');rows.forEach(function(r){r.style.display=(!b||r.textContent.indexOf(b)>-1)?'':'none';});}
+function showToast(icon,msg){
+  document.getElementById('ti').textContent=icon;document.getElementById('tm').textContent=msg;
+  var t=document.getElementById('toast');t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},3000);
+}
+function updateRoomHistory(){
+  var isGirl=USER.gender==='F';
+  var h4=document.getElementById('rh-sem4-hostel');
+  var h3=document.getElementById('rh-sem3-hostel');
+  var h1=document.getElementById('rh-sem1-hostel');
+  if(h4)h4.textContent=isGirl?'Girls Hostel 1':'Boys Hostel 3';
+  if(h3)h3.textContent=isGirl?'Girls Hostel 2':'Boys Hostel 5';
+  if(h1)h1.textContent=isGirl?'Girls Hostel 1':'Boys Hostel 1';
+}
+
+</script>
+<script>
+function fixWardenFontSize() {
+  var dashboard = document.getElementById('warden-dashboard');
+  if (!dashboard) return;
+  
+  var allElements = dashboard.querySelectorAll('*');
+  allElements.forEach(function(el) {
+    var currentSize = parseFloat(window.getComputedStyle(el).fontSize);
+    if (currentSize < 13) {
+      el.style.fontSize = '13px';
+    }
+    // Inline style override
+    if (el.style.fontSize) {
+      var inlineSize = parseFloat(el.style.fontSize);
+      if (inlineSize < 13) {
+        el.style.fontSize = '13px';
+      }
+    }
+  });
+}
+
+// Warden login hone ke baad call karo
+var origWardenLogin = window.doWardenLogin;
+window.doWardenLogin = function() {
+  origWardenLogin();
+  setTimeout(fixWardenFontSize, 500);
+};
+
+// Tab switch pe bhi
+var origShowWardenTab = window.showWardenTab;
+window.showWardenTab = function(tab) {
+  origShowWardenTab(tab);
+  setTimeout(fixWardenFontSize, 100);
+};
+</script>
+</body>
+</htmL>
