@@ -6,7 +6,8 @@ exports.signup = async (req,res)=>{
     try{
         console.log('Signup request:', req.body);
         const {name,email,password,regno,gender,year,branch,state,city} = req.body;
-        if(!name||!email||!password||!regno) return res.status(400).json({message:'Fields missing'});
+        if(!name||!email||!password||!regno||!gender) 
+  return res.status(400).json({message:'Fields missing'});
         const exists = await User.findOne({email});
         if(exists) return res.status(400).json({message:'Email already registered'});
         const hashed = await bcrypt.hash(password,10);

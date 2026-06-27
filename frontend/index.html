@@ -1273,7 +1273,7 @@ var selectedGender='';
 function selGender(g){selectedGender=g;document.getElementById('s-gender').value=g;document.getElementById('gt-m').className='gt'+(g==='M'?' sel-m':'');document.getElementById('gt-f').className='gt'+(g==='F'?' sel-f':'');}
 function doSignup(){
   var n=document.getElementById('s-name').value.trim(),e=document.getElementById('s-email').value.trim(),p=document.getElementById('s-pass').value,rn=document.getElementById('s-regno').value.trim(),g=document.getElementById('s-gender').value;
-  if(!n||!e||!p||!rn)return showToast('⚠️','Please fill all required fields.');
+ if(!n||!e||!p||!rn||!g) return showToast('⚠️','Please fill all required fields.');
   if(!e.includes('vitbhopal'))return showToast('⚠️','Use your @vitbhopal.ac.in email.');
   if(p.length<6)return showToast('⚠️','Password must be at least 6 characters.');
   if(!g)return showToast('⚠️','Please select your gender.');
@@ -1692,7 +1692,7 @@ function buildRoommateProfiles(){
     if(USER.gender==='F') return ['24BCE1456','24BCE1789','24BCE1923','24BCE1356'].indexOf(p.regno)>-1;
     return ['24BCE1567','24BCE1892','24BCE2011','24BCA0234','24BCE1302','24BCE1678'].indexOf(p.regno)>-1;
   });
-  if(!filtered.length) filtered=RM_DATA.filter(function(p){return p.regno!==USER.regno;});
+  // fallback line DELETE karo
   renderRoommateProfiles(filtered);
 }
   
@@ -1713,7 +1713,7 @@ function sendRmRequest(regno,name,initials,color,btnEl){
   if(btnEl&&btnEl.parentElement){var btns=btnEl.parentElement.querySelectorAll('.btn-rm-req');btns.forEach(function(b){b.textContent='Request Sent';b.style.background='var(--muted)';b.disabled=true;});}
   renderRequestsList();showToast('📩','Request sent to '+name+'!');
   if(sentRequests.filter(function(r){return r.status==='accepted';}).length===0){
-    setTimeout(function(){var r=sentRequests.find(function(x){return x.regno===regno;});if(r){r.status='accepted';renderRequestsList();renderRoommateProfiles(RM_DATA);showToast('🎉',name+' accepted your request!');}},2200);
+    setTimeout(function(){var r=sentRequests.find(function(x){return x.regno===regno;});if(r){r.status='accepted';renderRequestsList();buildRoommateProfiles();showToast('🎉',name+' accepted your request!');}},2200);
   }
 }
 function renderRequestsList(){
@@ -1728,8 +1728,13 @@ function filterRoommates(val){
   var year=document.getElementById('rm-year-filter').value||'';
   var sleep=document.getElementById('rm-sleep-filter').value||'';
   var filtered=RM_DATA.filter(function(p){
+    if(p.regno===USER.regno) return false;
+    if(USER.gender==='F'){if(['24BCE1456','24BCE1789','24BCE1923','24BCE1356','24BCE1701','24BCA0345'].indexOf(p.regno)===-1)return false;}
+    else{if(['24BCE1567','24BCE1892','24BCE2011','24BCA0234','24BCE1302','24BCE1678'].indexOf(p.regno)===-1)return false;}
     var matchQ=!q||(p.name.toLowerCase().indexOf(q)>-1||p.regno.toLowerCase().indexOf(q)>-1);
-    var matchB=!branch||p.branch===branch;var matchY=!year||p.year===year;var matchS=!sleep||p.tags.indexOf(sleep)>-1;
+    var matchB=!branch||p.branch===branch;
+    var matchY=!year||p.year===year;
+    var matchS=!sleep||p.tags.indexOf(sleep)>-1;
     return matchQ&&matchB&&matchY&&matchS;
   });
   renderRoommateProfiles(filtered);
